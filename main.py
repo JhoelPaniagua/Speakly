@@ -1,4 +1,6 @@
 import customtkinter as ctk
+from perfil import PerfilUsuario
+from PIL import Image
 
 # Configuración general
 ctk.set_appearance_mode("dark")
@@ -22,18 +24,23 @@ class App(ctk.CTk):
         self.barra.grid_propagate(False)
 
     def crear_barra_lateral(self):
-        self.barra = ctk.CTkFrame(self, width=200, corner_radius=0, fg_color="#1a1a2e")
+        self.barra = ctk.CTkFrame(self, width=200, corner_radius=0, fg_color="#FF8C00")
         self.barra.grid(row=0, column=0, sticky="nsew")
 
         # Logo
-        self.logo_label = ctk.CTkLabel(self.barra, text="Speakly", font=("Arial", 22, "bold"))
+        logo_img = ctk.CTkImage(Image.open("imagenes/logo-speakly.png"), size=(120, 120))
+        self.logo_label = ctk.CTkLabel(self.barra, image=logo_img, text="")
         self.logo_label.pack(pady=(20, 10))
 
-        # Foto + nombre de usuario (datos de prueba por ahora)
-        self.foto_usuario = ctk.CTkLabel(self.barra, text="👤", font=("Arial", 40))
+        # Foto + nombre de usuario (clickeable para abrir perfil)
+        self.foto_usuario = ctk.CTkButton(self.barra, text="👤", font=("Arial", 40), 
+            fg_color="transparent", hover_color="#e67700",
+            command=self.abrir_perfil)
         self.foto_usuario.pack(pady=(10, 0))
 
-        self.nombre_usuario = ctk.CTkLabel(self.barra, text="Jhoel", font=("Arial", 14))
+        self.nombre_usuario = ctk.CTkButton(self.barra, text="Jhoel", font=("Arial", 14),
+            fg_color="transparent", hover_color="#e67700",
+            command=self.abrir_perfil)
         self.nombre_usuario.pack(pady=(0, 20))
 
         # Botones de navegación
@@ -64,7 +71,15 @@ class App(ctk.CTk):
         self.label_contenido.pack(expand=True)
 
     def cambiar_contenido(self, texto):
-        self.label_contenido.configure(text=texto)  
+        self.label_contenido.configure(text=texto)
+
+    def abrir_perfil(self):
+        if hasattr(self, 'popup_perfil') and self.popup_perfil.winfo_exists():
+            return
+
+        usuario_prueba = {"nombre": "Jhoel", "correo": "jhoel@example.com", "foto": ""}
+        self.popup_perfil = PerfilUsuario(self.contenido, usuario_prueba)
+        self.popup_perfil.place(relx=0.5, rely=0.5, anchor="center")      
 
 
 if __name__ == "__main__":
