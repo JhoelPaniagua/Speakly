@@ -1,4 +1,5 @@
 import customtkinter as ctk
+from PIL import Image
 from tkinter import filedialog
 
 class PerfilUsuario(ctk.CTkFrame):
@@ -13,7 +14,7 @@ class PerfilUsuario(ctk.CTkFrame):
 
     def crear_widgets(self):
         # HEADER NARANJA
-        self.header = ctk.CTkFrame(self, corner_radius=0, fg_color="#FF8C00", height=160)
+        self.header = ctk.CTkFrame(self, corner_radius=0, fg_color="#FF9600", height=160)
         self.header.pack(fill="x", side="top")
         self.header.pack_propagate(False)
 
@@ -21,22 +22,19 @@ class PerfilUsuario(ctk.CTkFrame):
             font=("Arial", 20, "bold"), text_color="white").place(x=25, y=20)
 
         self.btn_cerrar = ctk.CTkButton(self.header, text="✕", width=30, height=30,
-            corner_radius=15, fg_color="#e67700", hover_color="#cc6a00",
+            corner_radius=15, fg_color="#FF9600", hover_color="#FFA011",
             text_color="white", command=self.cerrar_todo)
         self.btn_cerrar.place(relx=1.0, x=-25, y=20, anchor="ne")
 
-        ctk.CTkLabel(self.header, text="👤", font=("Arial", 30),
-            fg_color="#ffb366", corner_radius=10, width=60, height=60).place(x=25, y=70)
+        # Foto de perfil
+        ruta_foto = self.usuario.get("foto", "imagenes/usuario_pred.png") or "imagenes/usuario_pred.png"
+        self.foto_img = ctk.CTkImage(Image.open(ruta_foto), size=(90, 90))
+        self.foto_btn = ctk.CTkButton(self.header, image=self.foto_img, text="",
+            width=60, height=60, corner_radius=10,
+            fg_color="#FF9600", hover_color="#FFA011",
+            command=self.cambiar_foto)
+        self.foto_btn.place(x=25, y=55)
 
-        ctk.CTkLabel(self.header, text=self.usuario.get("nombre", "Usuario"),
-            font=("Arial", 16, "bold"), text_color="white").place(x=95, y=72)
-
-        ctk.CTkLabel(self.header, text=self.usuario.get("correo", ""),
-            font=("Arial", 11), text_color="#ffe0c2").place(x=95, y=96)
-
-        ctk.CTkLabel(self.header, text="#5 ranking",
-            font=("Arial", 10, "bold"), text_color="#FF8C00",
-            fg_color="white", corner_radius=10, width=80, height=20).place(x=95, y=118)
 
         # TARJETAS STREAK / MASTERED / RANKING
         stats = ctk.CTkFrame(self, fg_color="white")
@@ -54,7 +52,7 @@ class PerfilUsuario(ctk.CTkFrame):
             font=("Arial", 13, "bold"), text_color="#1a1a1a").pack(side="left")
 
         self.btn_editar = ctk.CTkButton(edit_header, text="✏ Edit", width=70, height=28,
-            corner_radius=12, fg_color="#ffe0c2", text_color="#FF8C00",
+            corner_radius=12, fg_color="#ffe0c2", text_color="#FF9600",
             hover_color="#ffd2a8", command=self.toggle_edicion)
         self.btn_editar.pack(side="right")
 
@@ -64,36 +62,36 @@ class PerfilUsuario(ctk.CTkFrame):
 
         col_n = ctk.CTkFrame(fila1, fg_color="white")
         col_n.pack(side="left", expand=True, fill="both", padx=(0, 8))
-        ctk.CTkLabel(col_n, text="NAME", font=("Arial", 10, "bold"), text_color="gray", anchor="w").pack(fill="x")
+        ctk.CTkLabel(col_n, text="NAME", font=("Arial", 10, "bold"), text_color="black", anchor="w").pack(fill="x")
         self.entry_nombre = ctk.CTkEntry(col_n, fg_color="#f5f5f5", border_width=0, corner_radius=8)
         self.entry_nombre.insert(0, self.usuario.get("nombre", ""))
-        self.entry_nombre.configure(state="disabled")
+        self.entry_nombre.configure(state="disabled", text_color="black")
         self.entry_nombre.pack(fill="x", pady=(5, 0))
 
         col_e = ctk.CTkFrame(fila1, fg_color="white")
         col_e.pack(side="left", expand=True, fill="both", padx=(8, 0))
-        ctk.CTkLabel(col_e, text="EMAIL", font=("Arial", 10, "bold"), text_color="gray", anchor="w").pack(fill="x")
+        ctk.CTkLabel(col_e, text="EMAIL", font=("Arial", 10, "bold"), text_color="black", anchor="w").pack(fill="x")
         self.entry_correo = ctk.CTkEntry(col_e, fg_color="#f5f5f5", border_width=0, corner_radius=8)
         self.entry_correo.insert(0, self.usuario.get("correo", ""))
-        self.entry_correo.configure(state="disabled")
+        self.entry_correo.configure(state="disabled", text_color="black")
         self.entry_correo.pack(fill="x", pady=(5, 0))
 
         # COUNTRY
         col_p = ctk.CTkFrame(self, fg_color="white")
         col_p.pack(fill="x", padx=25, pady=5)
-        ctk.CTkLabel(col_p, text="COUNTRY", font=("Arial", 10, "bold"), text_color="gray", anchor="w").pack(fill="x")
+        ctk.CTkLabel(col_p, text="COUNTRY", font=("Arial", 10, "bold"), text_color="black", anchor="w").pack(fill="x")
         self.entry_pais = ctk.CTkEntry(col_p, fg_color="#f5f5f5", border_width=0, corner_radius=8)
         self.entry_pais.insert(0, self.usuario.get("pais", ""))
-        self.entry_pais.configure(state="disabled")
+        self.entry_pais.configure(state="disabled", text_color="black")
         self.entry_pais.pack(fill="x", pady=(5, 0))
 
         # BIO
         col_b = ctk.CTkFrame(self, fg_color="white")
         col_b.pack(fill="x", padx=25, pady=5)
-        ctk.CTkLabel(col_b, text="BIO", font=("Arial", 10, "bold"), text_color="gray", anchor="w").pack(fill="x")
+        ctk.CTkLabel(col_b, text="BIO", font=("Arial", 10, "bold"), text_color="black", anchor="w").pack(fill="x")
         self.entry_bio = ctk.CTkTextbox(col_b, fg_color="#f5f5f5", border_width=0, corner_radius=8, height=50)
         self.entry_bio.insert("1.0", self.usuario.get("bio", ""))
-        self.entry_bio.configure(state="disabled")
+        self.entry_bio.configure(state="disabled", text_color="black")
         self.entry_bio.pack(fill="x", pady=(5, 0))
 
     def crear_tarjeta_stat(self, master, emoji, valor, label, color_fondo):
@@ -128,4 +126,12 @@ class PerfilUsuario(ctk.CTkFrame):
             self.master.master.fondo_oscuro.destroy()
         except:
             pass
-        self.master.destroy()   
+        self.master.destroy()  
+
+    def cambiar_foto(self):
+        ruta = filedialog.askopenfilename(filetypes=[("Imagenes", "*.png *.jpg *.jpeg")])
+        if ruta:
+            self.usuario["foto"] = ruta
+            nueva_img = ctk.CTkImage(Image.open(ruta), size=(60, 60))
+            self.foto_btn.configure(image=nueva_img)
+            self.foto_img = nueva_img     

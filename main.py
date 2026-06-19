@@ -26,53 +26,56 @@ class App(ctk.CTk):
         self.barra.grid(row=0, column=0, sticky="nsew")
 
         # Logo
-        logo_img = ctk.CTkImage(Image.open("imagenes/logo-speakly.png"), size=(120, 120))
-        self.logo_label = ctk.CTkLabel(self.barra, image=logo_img, text="")
-        self.logo_label.pack(pady=(20, 10))
+        img = Image.open("imagenes/logo-speakly.png")
+        
 
-        self.separador_logo = ctk.CTkFrame(self.barra, height=2, fg_color="#e67700")
-        self.separador_logo.pack(fill="x", padx=15, pady=(0, 10))
+        logo_img = ctk.CTkImage(img, size=(120, 50))  # usa el tamaño real
+        self.logo_label = ctk.CTkLabel(self.barra, image=logo_img, text="")
+        self.logo_label.pack(pady=(25,30), anchor="nw", padx=(15, 0))  
+
+        self.separador_logo = ctk.CTkFrame(self.barra, height=2, fg_color="#FCA327")
+        self.separador_logo.pack(fill="x", padx=15, pady=(0, 5))
 
         # Usuario
         foto_usuario_img = ctk.CTkImage(Image.open("imagenes/usuario_pred.png"), size=(45, 45))
         self.usuario_frame = ctk.CTkButton(self.barra,
             image=foto_usuario_img, text="Jhoel\n#5 ranking",
             font=("Arial", 13), anchor="w", compound="left",
-            fg_color="transparent", hover_color="#e67700",
-            command=self.abrir_perfil, height=60)
-        self.usuario_frame.pack(pady=(10, 20), padx=15, fill="x")
+            fg_color="#FFA626", hover_color="#FFB040",
+            command=self.abrir_perfil, height=65, corner_radius=20)
+        self.usuario_frame.pack(pady=(3, 3), padx=15, fill="x")
 
         # Botones navegación
         self.btn_home = ctk.CTkButton(self.barra, text="🏠  Home",
             font=("Arial", 14), anchor="w",
-            fg_color="white", text_color="#FF8C00", hover_color="#f0f0f0",
+            fg_color="white", text_color="#FF8C00", hover_color="#FFA626", height=55, corner_radius=20,
             command=self.mostrar_home)
-        self.btn_home.pack(pady=(10, 5), padx=15, fill="x")
+        self.btn_home.pack(pady=(3, 3), padx=15, fill="x")
 
         self.btn_vocabulary = ctk.CTkButton(self.barra, text="📚  Vocabulary",
             font=("Arial", 14), anchor="w",
-            fg_color="transparent", text_color="white", hover_color="#e67700",
+            fg_color="transparent", text_color="white", hover_color="#FFA626", height=55, corner_radius=20,
             command=lambda: self.cargar_texto("📚 Aquí va Aprender"))
-        self.btn_vocabulary.pack(pady=5, padx=15, fill="x")
+        self.btn_vocabulary.pack(pady=3, padx=15, fill="x")
 
-        self.separador = ctk.CTkFrame(self.barra, height=2, fg_color="#e67700")
-        self.separador.pack(fill="x", padx=15, pady=15)
+        self.separador = ctk.CTkFrame(self.barra, height=2, fg_color="#FCA327")
+        self.separador.pack(fill="x", padx=15, pady=5)
 
         self.btn_ranking = ctk.CTkButton(self.barra, text="🏆  Ranking",
             font=("Arial", 14), anchor="w",
-            fg_color="transparent", text_color="white", hover_color="#e67700",
+            fg_color="transparent", text_color="white", hover_color="#FFA626", height=55, corner_radius=20,
             command=lambda: self.cargar_texto("🏆 Aquí va el Ranking"))
-        self.btn_ranking.pack(pady=5, padx=15, fill="x")
+        self.btn_ranking.pack(pady=0, padx=15, fill="x")
 
         # Cuadros stats
         self.stats_frame = ctk.CTkFrame(self.barra, fg_color="transparent")
-        self.stats_frame.pack(pady=15, padx=15, fill="x")
+        self.stats_frame.pack(pady=3, padx=15, fill="x")
 
-        self.cuadro_racha = ctk.CTkFrame(self.stats_frame, corner_radius=10, fg_color="#e67700", height=70)
+        self.cuadro_racha = ctk.CTkFrame(self.stats_frame, corner_radius=10, fg_color="#ff9626", height=70)
         self.cuadro_racha.pack(side="left", padx=(0, 5), expand=True, fill="both")
         ctk.CTkLabel(self.cuadro_racha, text="🔥\n7 days", font=("Arial", 12, "bold"), text_color="white").pack(expand=True)
 
-        self.cuadro_verbos = ctk.CTkFrame(self.stats_frame, corner_radius=10, fg_color="#e67700", height=70)
+        self.cuadro_verbos = ctk.CTkFrame(self.stats_frame, corner_radius=10, fg_color="#ff9626", height=70)
         self.cuadro_verbos.pack(side="left", padx=(5, 0), expand=True, fill="both")
         ctk.CTkLabel(self.cuadro_verbos, text="📚\n0/16", font=("Arial", 12, "bold"), text_color="white").pack(expand=True)
 
@@ -81,12 +84,17 @@ class App(ctk.CTk):
 
         self.btn_logout = ctk.CTkButton(self.barra, text="🚪  Log out",
             font=("Arial", 14), anchor="w",
-            fg_color="transparent", text_color="white", hover_color="#e67700",
+            fg_color="transparent", text_color="white", hover_color="#FF7B00", height=50, corner_radius=20,
             command=self.cerrar_sesion)
-        self.btn_logout.pack(pady=10, padx=15, fill="x")
+        self.btn_logout.pack(pady=1, padx=15, fill="x")
 
-        ctk.CTkLabel(self.barra, text="BY", font=("Arial", 9), text_color="#2b1500").pack(pady=(10, 0))
-        ctk.CTkLabel(self.barra, text="KODA", font=("Arial", 12, "bold"), text_color="white").pack(pady=(0, 15))
+        ctk.CTkLabel(self.barra, text="BY", font=("Arial", 12), text_color="#D4D4D4").pack(pady=(0, 0))
+        
+
+        # Logo KODA
+        logo_img = ctk.CTkImage(Image.open("imagenes/Logo-KODA.png"), size=(50, 50))
+        self.logo_label = ctk.CTkLabel(self.barra, image=logo_img, text="")
+        self.logo_label.pack(pady=(0, 3))
 
     def crear_area_contenido(self):
         self.contenido = ctk.CTkFrame(self, fg_color="#FFF5EC")
@@ -106,7 +114,7 @@ class App(ctk.CTk):
         ctk.CTkLabel(self.contenido, text="Continue your progress. Keep it up!",
             font=("Arial", 14), text_color="gray").pack(anchor="w", padx=40, pady=(5, 20))
 
-        tarjeta = ctk.CTkFrame(self.contenido, corner_radius=15, fg_color="#FF8C00")
+        tarjeta = ctk.CTkFrame(self.contenido, corner_radius=15, fg_color="#FF9600")
         tarjeta.pack(padx=40, pady=10, fill="x")
 
         ctk.CTkLabel(tarjeta, text="YOUR PROGRESS",
