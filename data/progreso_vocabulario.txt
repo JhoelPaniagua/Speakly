@@ -1,0 +1,5 @@
+# Progreso de vocabulario por usuario (lo va llenando aprender.py)
+# Formato:  usuario|palabra_ingles|estado|intentos|xp_acumulado
+# estado puede ser: aprendido | debil
+# Este archivo lo va a leer progreso.py para armar la barra de
+# porcentaje y la lista de "verbos debiles". No editar a mano.
