@@ -218,7 +218,7 @@ class OracionEjercicio:
 # ---------------------------------------------------------------------------
 # Pantalla "Sentences - Verbo"
 # ---------------------------------------------------------------------------
-class ConstructorOraciones(ctk.CTkFrame):
+class PantallaConstructor(ctk.CTkFrame):
     """Pantalla donde se arman las 3 oraciones (presente/pasado/futuro) de
     cada verbo, seleccionando palabras de un banco.
 
@@ -230,7 +230,7 @@ class ConstructorOraciones(ctk.CTkFrame):
                                siguiente verbo.
     """
 
-    def __init__(self, master, usuario="invitado", al_completar_verbo=None, **kwargs):
+    def __init__(self, master, usuario="invitado", indice_inicial=0, al_completar_verbo=None, **kwargs):
         super().__init__(master, fg_color="#FFF5EC", **kwargs)
 
         self.usuario = usuario
@@ -238,7 +238,7 @@ class ConstructorOraciones(ctk.CTkFrame):
 
         self.datos_oraciones, self.orden_verbos = cargar_oraciones()
 
-        self.indice_verbo = 0
+        self.indice_verbo = indice_inicial
         self.indice_tiempo = 0       # 0=presente, 1=pasado, 2=futuro
         self.intentos_actual = 0
         self.mostrar_error = False   # True solo justo despues de un Check fallido
@@ -437,29 +437,39 @@ class ConstructorOraciones(ctk.CTkFrame):
         # --- area de respuesta (dropzone) ---
         color_borde_dropzone = "#c0392b" if self.mostrar_error else "#dddddd"
         dropzone = ctk.CTkFrame(tarjeta, corner_radius=10, fg_color="#fafafa",
-            border_width=1, border_color=color_borde_dropzone, height=46)
+        border_width=1, border_color=color_borde_dropzone, height=46)
         dropzone.pack(fill="x", padx=18, pady=(0, 10))
 
         if ejercicio.palabras_seleccionadas:
             for i, palabra in enumerate(ejercicio.palabras_seleccionadas):
-                ctk.CTkButton(dropzone, text=palabra, height=30, corner_radius=15,
+                ctk.CTkButton(dropzone, text=palabra, height=26, corner_radius=12,
                     fg_color="#ffe0c2", text_color="#FF8C00", hover_color="#ffd2a8",
-                    font=("Arial", 12, "bold"),
-                    command=lambda idx=i: self.click_seleccionada(idx)).pack(side="left", padx=4, pady=8)
+                    font=("Arial", 11), width=0,  # width=0 para que se ajuste al texto
+                    command=lambda idx=i: self.click_seleccionada(idx)).pack(side="left", padx=3, pady=8)
         else:
             ctk.CTkLabel(dropzone, text="Click the words to build the sentence",
                 font=("Arial", 12), text_color="gray").pack(pady=10)
 
-        # --- banco de palabras disponibles ---
-        fila_banco = ctk.CTkFrame(tarjeta, fg_color="transparent")
-        fila_banco.pack(fill="x", padx=18, pady=(0, 5))
+        # --- banco de palabras en filas que hacen wrap ---
+        contenedor_banco = ctk.CTkFrame(tarjeta, fg_color="transparent")
+        contenedor_banco.pack(fill="x", padx=18, pady=(0, 5))
+
+        fila_actual = ctk.CTkFrame(contenedor_banco, fg_color="transparent")
+        fila_actual.pack(fill="x", pady=2)
+        palabras_en_fila = 0
+
         for i, ficha in enumerate(ejercicio.banco_palabras):
             if ficha["usada"]:
                 continue
-            ctk.CTkButton(fila_banco, text=ficha["texto"], height=30, corner_radius=15,
-                fg_color="#f0f0f0", text_color="#1a1a1a", hover_color="#e2e2e2",
-                font=("Arial", 12),
-                command=lambda idx=i: self.click_banco(idx)).pack(side="left", padx=4, pady=4)
+            if palabras_en_fila >= 5:  # más palabras por fila
+                fila_actual = ctk.CTkFrame(contenedor_banco, fg_color="transparent")
+                fila_actual.pack(fill="x", pady=1)
+                palabras_en_fila = 0
+            ctk.CTkButton(fila_actual, text=ficha["texto"], height=26, corner_radius=12,
+                    fg_color="#f0f0f0", text_color="#1a1a1a", hover_color="#e2e2e2",
+                    font=("Arial", 11), width=0,  # width=0 para que cada botón sea solo tan ancho como su texto
+                    command=lambda idx=i: self.click_banco(idx)).pack(side="left", padx=3, pady=2)
+            palabras_en_fila += 1
 
         # --- mensaje de intentos / error / revelada ---
         if self.revelada:
@@ -556,8 +566,10 @@ class ConstructorOraciones(ctk.CTkFrame):
                 verbo = self.verbo_actual()
                 tiempo = TIEMPOS[self.indice_tiempo]
                 guardar_progreso_oracion(self.usuario, verbo, tiempo, "revelado", 0)
-                self.revelada = True
-            self.refrescar_pantalla()
+                self.avanzar_tiempo()  # avanza directo sin mostrar pantalla de error
+            else:
+                self.mostrar_error = True
+                self.refrescar_pantalla()
 
     def reintentar(self):
         """Se ejecuta al apretar 'Try again': limpia la seleccion pero
@@ -629,6 +641,7 @@ class ConstructorOraciones(ctk.CTkFrame):
 # Permite probar este archivo solo: python constructor.py
 # ---------------------------------------------------------------------------
 if __name__ == "__main__":
+
     ctk.set_appearance_mode("light")
     ctk.set_default_color_theme("blue")
 
@@ -636,11 +649,24 @@ if __name__ == "__main__":
     ventana.title("Speakly - Constructor de oraciones (prueba aislada)")
     ventana.geometry("950x680")
 
-    def simular_siguiente_verbo(verbo):
-        print(f"[DEBUG] Verbo '{verbo}' completado. Aqui se pasaria al siguiente verbo en aprender.py")
 
-    pantalla = ConstructorOraciones(ventana, usuario="invitado",
-        al_completar_verbo=simular_siguiente_verbo)
+    usuario = {
+        "nombre": "Jhoel"
+    }
+
+
+    def simular_siguiente_verbo(verbo):
+        print(f"[DEBUG] Verbo '{verbo}' completado.")
+
+
+    pantalla = PantallaConstructor(
+        ventana,
+        usuario=usuario["nombre"],
+        al_completar_verbo=simular_siguiente_verbo
+    )
+
+
     pantalla.pack(fill="both", expand=True)
+
 
     ventana.mainloop()
