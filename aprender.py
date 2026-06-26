@@ -36,7 +36,6 @@ class PantallaAprender(ctk.CTkFrame):
 
         self.carpeta_imagenes = "imagenes"
         self.carpeta_audios = "audios"
-        self.indice_actual = 0
         
         # Dibujar los componentes
         

@@ -186,20 +186,21 @@ class App(ctk.CTk):
     def mostrar_aprender(self, indice_verbo=0):
         self.limpiar_contenido()
         pantalla = PantallaAprender(
-        self.contenido,
-        usuario="Jhoel",
-        indice_inicial=indice_verbo,
-        al_completar=self.mostrar_constructor
+            self.contenido,
+            usuario="Jhoel",
+            indice_inicial=indice_verbo,
+            al_completar=self.mostrar_constructor
         )
         pantalla.pack(fill="both", expand=True)
 
     def mostrar_constructor(self, indice_verbo):
         self.limpiar_contenido()
         pantalla = PantallaConstructor(
-        self.contenido,
-        usuario="Jhoel",
-        indice_inicial=indice_verbo,
-        al_completar_verbo=lambda verbo: self.mostrar_aprender(indice_verbo + 1)
+            self.contenido,
+            usuario="Jhoel",
+            indice_inicial=indice_verbo,
+            al_completar_verbo=lambda verbo: self.mostrar_aprender(indice_verbo + 1)
+            # ↑ avanza al siguiente
         )
         pantalla.pack(fill="both", expand=True) 
 

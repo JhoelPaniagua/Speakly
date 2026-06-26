@@ -8,6 +8,9 @@ invitado|play|presente|correcto|3|30
 invitado|play|pasado|correcto|1|10
 invitado|play|futuro|correcto|1|10
 invitado|eat|presente|correcto|1|10
-Jhoel|play|presente|correcto|3|20
-Jhoel|play|pasado|correcto|3|20
-Jhoel|play|futuro|correcto|3|10
+Jhoel|play|presente|correcto|5|40
+Jhoel|play|pasado|correcto|5|40
+Jhoel|play|futuro|correcto|5|30
+Jhoel|eat|presente|correcto|1|10
+Jhoel|eat|pasado|correcto|1|10
+Jhoel|eat|futuro|correcto|1|10
