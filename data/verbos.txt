@@ -1,0 +1,23 @@
+# Base de datos de verbos para Vocabulary - Word (aprender.py)
+# Formato:  ingles|espanol|archivo_imagen
+# El archivo_imagen debe existir dentro de la carpeta imagenes_verbos/
+#
+# IMPORTANTE: cuando tengan los dibujos definitivos del prototipo,
+# solo reemplacen los archivos .jpg dentro de imagenes_verbos/ usando
+# EXACTAMENTE estos mismos nombres. No hace falta tocar este .txt.
+play|jugar|play.jpg
+eat|comer|eat.jpg
+read|leer|read.jpg
+sing|cantar|sing.jpg
+write|escribir|write.jpg
+sleep|dormir|sleep.jpg
+run|correr|run.jpg
+talk|hablar|talk.jpg
+dance|bailar|dance.jpg
+listen|escuchar|listen.jpg
+speak|hablar|speak.jpg
+ask|preguntar|ask.jpg
+answer|responder|answer.jpg
+learn|aprender|learn.jpg
+teach|enseñar|teach.jpg
+practice|practicar|practice.jpg

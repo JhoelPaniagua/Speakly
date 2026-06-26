@@ -52,6 +52,21 @@ try:
 except ImportError:
     pyttsx3 = None
 
+# Un solo motor de voz para todo el programa (NO se debe llamar a
+# pyttsx3.init() una vez por cada click: en Windows eso es lo que provoca
+# el error "run loop already started"). _MOTOR_OCUPADO evita que dos
+# clicks rapidos intenten hablar al mismo tiempo.
+_motor_voz = None
+_motor_voz_ocupado = False
+
+
+def _obtener_motor_voz():
+    global _motor_voz
+    if _motor_voz is None:
+        _motor_voz = pyttsx3.init()
+        _motor_voz.setProperty("rate", 150)
+    return _motor_voz
+
 
 # ---------------------------------------------------------------------------
 # Rutas (todo relativo a este archivo)
@@ -226,6 +241,7 @@ class ConstructorOraciones(ctk.CTkFrame):
         self.indice_verbo = 0
         self.indice_tiempo = 0       # 0=presente, 1=pasado, 2=futuro
         self.intentos_actual = 0
+        self.mostrar_error = False   # True solo justo despues de un Check fallido
         self.revelada = False        # True si se mostro la respuesta tras agotar intentos
         self.xp_sesion = 0
         self.ejercicio_actual = None
@@ -312,6 +328,7 @@ class ConstructorOraciones(ctk.CTkFrame):
             instruccion="Build all 3 sentences in different tenses",
         )
         self.intentos_actual = 0
+        self.mostrar_error = False
         self.revelada = False
 
     def verbo_actual(self):
@@ -418,7 +435,7 @@ class ConstructorOraciones(ctk.CTkFrame):
             boton_audio.configure(state="disabled", text="🔇 Audio not available")
 
         # --- area de respuesta (dropzone) ---
-        color_borde_dropzone = "#c0392b" if (self.intentos_actual > 0 and not self.revelada and not ejercicio.verificar_orden()) else "#dddddd"
+        color_borde_dropzone = "#c0392b" if self.mostrar_error else "#dddddd"
         dropzone = ctk.CTkFrame(tarjeta, corner_radius=10, fg_color="#fafafa",
             border_width=1, border_color=color_borde_dropzone, height=46)
         dropzone.pack(fill="x", padx=18, pady=(0, 10))
@@ -449,19 +466,24 @@ class ConstructorOraciones(ctk.CTkFrame):
             ctk.CTkLabel(tarjeta, text=f"The right answer was: {ejercicio.texto_correcto()}",
                 font=("Arial", 12, "bold"), text_color="#8a6d00",
                 fg_color="#fff8d6", corner_radius=8).pack(fill="x", padx=18, pady=(0, 10))
-        elif self.intentos_actual > 0:
+        elif self.mostrar_error:
             ctk.CTkLabel(tarjeta, text="❌ Incorrect. Try again.",
                 font=("Arial", 12, "bold"), text_color="#c0392b",
                 fg_color="#fdecea", corner_radius=8).pack(fill="x", padx=18, pady=(0, 5))
             ctk.CTkLabel(tarjeta, text=f"Attempt {self.intentos_actual + 1}/{MAX_INTENTOS}",
                 font=("Arial", 11), text_color="#c0392b").pack(anchor="w", padx=18, pady=(0, 10))
+        elif self.intentos_actual > 0:
+            # ya fallo antes, pero esta armando un intento nuevo: solo
+            # mostramos el contador, sin el cartel rojo de error
+            ctk.CTkLabel(tarjeta, text=f"Attempt {self.intentos_actual + 1}/{MAX_INTENTOS}",
+                font=("Arial", 11), text_color="gray").pack(anchor="w", padx=18, pady=(0, 10))
 
         # --- boton principal: Check / Try again / Continue ---
         if self.revelada:
             ctk.CTkButton(tarjeta, text="Continue →", height=40, corner_radius=10,
                 font=("Arial", 14, "bold"), fg_color="#5B5FEF", hover_color="#4548c9",
                 command=self.continuar_revelada).pack(fill="x", padx=18, pady=(0, 18))
-        elif self.intentos_actual > 0:
+        elif self.mostrar_error:
             ctk.CTkButton(tarjeta, text="↻ Try again", height=40, corner_radius=10,
                 font=("Arial", 14, "bold"), fg_color="#FF8C00", hover_color="#e67700",
                 command=self.reintentar).pack(fill="x", padx=18, pady=(0, 18))
@@ -479,26 +501,36 @@ class ConstructorOraciones(ctk.CTkFrame):
     # ------------------------------------------------------------------
     def click_banco(self, indice_ficha):
         self.ejercicio_actual.seleccionar(indice_ficha)
+        self.mostrar_error = False  # esta armando un intento nuevo
         self.refrescar_pantalla()
 
     def click_seleccionada(self, indice_seleccion):
         self.ejercicio_actual.quitar_seleccionada(indice_seleccion)
+        self.mostrar_error = False  # esta armando un intento nuevo
         self.refrescar_pantalla()
 
     # ------------------------------------------------------------------
     # Audio (pronunciacion de la oracion correcta)
     # ------------------------------------------------------------------
     def reproducir_audio(self):
+        global _motor_voz_ocupado
+
         if pyttsx3 is None or self.ejercicio_actual is None:
             return
+        if _motor_voz_ocupado:
+            return  # ya esta hablando: ignoramos el click para no chocar
 
         oracion = self.ejercicio_actual.texto_correcto()
 
         def hablar():
-            motor = pyttsx3.init()
-            motor.setProperty("rate", 150)
-            motor.say(oracion)
-            motor.runAndWait()
+            global _motor_voz_ocupado
+            _motor_voz_ocupado = True
+            try:
+                motor = _obtener_motor_voz()
+                motor.say(oracion)
+                motor.runAndWait()
+            finally:
+                _motor_voz_ocupado = False
 
         threading.Thread(target=hablar, daemon=True).start()
 
@@ -519,6 +551,7 @@ class ConstructorOraciones(ctk.CTkFrame):
             self.avanzar_tiempo()
         else:
             self.intentos_actual += 1
+            self.mostrar_error = True
             if self.intentos_actual >= MAX_INTENTOS:
                 verbo = self.verbo_actual()
                 tiempo = TIEMPOS[self.indice_tiempo]
@@ -530,6 +563,7 @@ class ConstructorOraciones(ctk.CTkFrame):
         """Se ejecuta al apretar 'Try again': limpia la seleccion pero
         mantiene el contador de intentos."""
         self.ejercicio_actual.reiniciar_seleccion()
+        self.mostrar_error = False
         self.refrescar_pantalla()
 
     def continuar_revelada(self):
