@@ -102,7 +102,7 @@ class App(ctk.CTk):
             font=("Arial", 14), anchor="w",
             fg_color="transparent", text_color="white", hover_color="#FF7B00", height=50, corner_radius=20,
             command=self.cerrar_sesion)
-        self.btn_logout.pack(pady=1, padx=15, fill="x")
+        self.btn_logout.pack(pady=(93, 1), padx=15, fill="x")
 
         ctk.CTkLabel(self.barra, text="BY", font=("Arial", 12), text_color="#D4D4D4").pack(pady=(0, 0))
         
