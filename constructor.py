@@ -218,7 +218,7 @@ class OracionEjercicio:
 # ---------------------------------------------------------------------------
 # Pantalla "Sentences - Verbo"
 # ---------------------------------------------------------------------------
-class ConstructorOraciones(ctk.CTkFrame):
+class PantallaConstructor(ctk.CTkFrame):
     """Pantalla donde se arman las 3 oraciones (presente/pasado/futuro) de
     cada verbo, seleccionando palabras de un banco.
 
@@ -639,7 +639,24 @@ if __name__ == "__main__":
     def simular_siguiente_verbo(verbo):
         print(f"[DEBUG] Verbo '{verbo}' completado. Aqui se pasaria al siguiente verbo en aprender.py")
 
-    pantalla = ConstructorOraciones(ventana, usuario="invitado",
+    pantalla = PantallaConstructor(ventana, usuario="invitado",
+        al_completar_verbo=simular_siguiente_verbo)
+    pantalla.pack(fill="both", expand=True)
+
+    ventana.mainloop()
+
+if __name__ == "__main__":
+    ctk.set_appearance_mode("light")
+    ctk.set_default_color_theme("blue")
+
+    ventana = ctk.CTk()
+    ventana.title("Speakly - Constructor de oraciones (prueba aislada)")
+    ventana.geometry("950x680")
+
+    def simular_siguiente_verbo(verbo):
+        print(f"[DEBUG] Verbo '{verbo}' completado.")
+
+    pantalla = PantallaConstructor(ventana, usuario="invitado",
         al_completar_verbo=simular_siguiente_verbo)
     pantalla.pack(fill="both", expand=True)
 
