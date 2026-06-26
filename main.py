@@ -1,17 +1,21 @@
 import customtkinter as ctk
+import os
 from perfil import PerfilUsuario
 from PIL import Image
 
 from aprender import PantallaAprender
 from constructor import PantallaConstructor
 
+
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("blue")
 
 class App(ctk.CTk):
-    def __init__(self):
+
+    def __init__(self, usuario):
         super().__init__()
 
+        self.usuario = usuario
         self.title("Speakly")
         self.geometry("1000x600")
         self.resizable(True, True)
@@ -42,13 +46,47 @@ class App(ctk.CTk):
         self.separador_logo.pack(fill="x", padx=15, pady=(0, 5))
 
         # Usuario
-        foto_usuario_img = ctk.CTkImage(Image.open("imagenes/usuario_pred.png"), size=(45, 45))
-        self.usuario_frame = ctk.CTkButton(self.barra,
-            image=foto_usuario_img, text="Jhoel\n#5 ranking",
-            font=("Arial", 13), anchor="w", compound="left",
-            fg_color="#FFA626", hover_color="#FFB040",
-            command=self.abrir_perfil, height=65, corner_radius=20)
-        self.usuario_frame.pack(pady=(3, 3), padx=15, fill="x")
+
+        ruta_foto = self.usuario.get(
+            "foto",
+            "imagenes/usuario_pred.png"
+        )
+
+        # por si la foto fue borrada
+        if not os.path.exists(ruta_foto):
+            ruta_foto = "imagenes/usuario_pred.png"
+
+
+        foto_usuario_img = ctk.CTkImage(
+            Image.open(ruta_foto),
+            size=(45, 45)
+        )
+
+
+        # guardar referencia para que no desaparezca la imagen
+        self.usuario_img = foto_usuario_img
+
+
+        self.usuario_frame = ctk.CTkButton(
+            self.barra,
+            image=self.usuario_img,
+            text=f"{self.usuario['nombre']}\n#5 ranking",
+            font=("Arial", 13),
+            anchor="w",
+            compound="left",
+            fg_color="#FFA626",
+            hover_color="#FFB040",
+            command=self.abrir_perfil,
+            height=65,
+            corner_radius=20
+        )
+
+
+        self.usuario_frame.pack(
+            pady=(3, 3),
+            padx=15,
+            fill="x"
+        )
 
         # Cargar íconos
         ico_home       = ctk.CTkImage(Image.open("imagenes/home.png"),    size=(22, 22))
@@ -124,7 +162,7 @@ class App(ctk.CTk):
     def mostrar_home(self):
         self.limpiar_contenido()
 
-        ctk.CTkLabel(self.contenido, text="Welcome back, Jhoel! 👋",
+        ctk.CTkLabel(self.contenido, text=f"Welcome back, {self.usuario['nombre']}! 👋",
             font=("Arial", 26, "bold"), text_color="#1a1a1a").pack(anchor="w", padx=40, pady=(30, 0))
 
         ctk.CTkLabel(self.contenido, text="Continue your progress. Keep it up!",
@@ -187,12 +225,23 @@ class App(ctk.CTk):
 
         self.bind("<Configure>", actualizar_posicion)
 
-        usuario = {"nombre": "Jhoel", "correo": "jhoel@est.umss.edu", "pais": "Bolivia", "bio": ""}
+        usuario = self.usuario
         perfil = PerfilUsuario(self.ventana_perfil, usuario)
         perfil.pack(expand=True, fill="both")
 
     def cerrar_sesion(self):
-        self.cargar_texto("🚪 Sesión cerrada")
+
+        self.after(100, self.abrir_login)
+
+
+    def abrir_login(self):
+
+        from login import SpeaklyApp
+
+        self.destroy()
+
+        login = SpeaklyApp()
+        login.mainloop()
 
     def mostrar_aprender(self, indice_verbo=0):
         self.limpiar_contenido()
@@ -217,5 +266,10 @@ class App(ctk.CTk):
 
 
 if __name__ == "__main__":
-    app = App()
+    usuario_prueba = {
+        "nombre":"Prueba",
+        "correo":"prueba@gmail.com"
+    }
+
+    app = App(usuario_prueba)
     app.mainloop()

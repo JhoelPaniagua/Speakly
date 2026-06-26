@@ -1,6 +1,9 @@
 import customtkinter as ctk
 from PIL import Image
+from main import App
 import os
+import json
+
 
 # ── Tema general ──────────────────────────────────────────────────────────────
 ctk.set_appearance_mode("light")
@@ -21,8 +24,9 @@ class SpeaklyApp(ctk.CTk):
         super().__init__()
         self.title("Speakly")
         self.geometry("1100x700")
-        self.resizable(False, False)
+        self.resizable(True, True)
         self.configure(fg_color=BG_WHITE)
+        self.usuario_actual = None
 
         # Panel izquierdo (naranja) — fijo
         self.left = ctk.CTkFrame(self, width=730, corner_radius=0, fg_color=ORANGE)
@@ -128,11 +132,42 @@ class SpeaklyApp(ctk.CTk):
 
     def _on_signin(self):
         user = self.login_user.get().strip()
-        pwd  = self.login_pwd.get().strip()
+        pwd = self.login_pwd.get().strip()
+
         if not user or not pwd:
-            self._show_msg(self.right, "Please fill in all fields.", "red")
+            self._show_msg(
+                self.right,
+                "Please fill in all fields.",
+                "red"
+            )
+            return
+
+        usuarios = self.cargar_usuarios()
+        usuario_encontrado = None
+
+        for usuario in usuarios:
+            if ((usuario["usuario"] == user or 
+                usuario["correo"] == user)
+                and usuario["password"] == pwd):
+
+                usuario_encontrado = usuario
+                break
+
+        if usuario_encontrado:
+
+            self.destroy()
+
+
+            app = App(usuario_encontrado)
+
+            app.mainloop()
         else:
-            self._show_msg(self.right, f"Welcome, {user}!", "green")
+
+            self._show_msg(
+                self.right,
+                "Incorrect username or password",
+                "red"
+            )
     
     # ══════════════════════════════════════════════════════════════════════════
     # PANTALLA 2 — REGISTRO
@@ -193,6 +228,21 @@ class SpeaklyApp(ctk.CTk):
         if len(vals["PASSWORD"]) < 8:
             self._show_msg(self.right, "Password must be at least 8 characters.", "red")
             return
+        
+        usuarios = self.cargar_usuarios()
+
+        nuevo = {
+
+            "nombre": vals["FULL NAME"],
+            "usuario": vals["USERNAME"],
+            "correo": vals["EMAIL ADDRESS"],
+            "password": vals["PASSWORD"]
+
+        }
+
+        usuarios.append(nuevo)
+
+        self.guardar_usuarios(usuarios)
         # Registro exitoso → ir a Login
         self._show_msg(self.right, "Account created! Please log in.", "green")
         self.after(1500, self.show_login)
@@ -258,6 +308,26 @@ class SpeaklyApp(ctk.CTk):
                             fg_color="transparent")
         msg.place(relx=0.5, rely=0.97, anchor="s")
         self.after(2500, msg.destroy)
+
+    def cargar_usuarios(self):
+        if not os.path.exists("usuarios.json"):
+            with open("usuarios.json","w") as archivo:
+                json.dump([], archivo)
+
+            return []
+
+        with open("usuarios.json","r") as archivo:
+            return json.load(archivo)
+
+
+
+    def guardar_usuarios(self, usuarios):
+        with open("usuarios.json","w") as archivo:
+            json.dump(
+                usuarios,
+                archivo,
+                indent=4
+            )    
     
     
 # ── Punto de entrada ──────────────────────────────────────────────────────────

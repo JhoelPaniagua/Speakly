@@ -160,6 +160,15 @@ class PantallaAprender(ctk.CTkFrame):
 if __name__ == "__main__":
     app = ctk.CTk()
     app.geometry("1250x720")
-    pantalla = PantallaAprender(app, usuario="Jhoel")
+
+    usuario = {
+        "nombre": "Jhoel"
+    }
+
+    pantalla = PantallaAprender(
+        app,
+        usuario=usuario["nombre"]
+    )
+
     pantalla.pack(fill="both", expand=True)
     app.mainloop()

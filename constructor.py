@@ -641,6 +641,7 @@ class PantallaConstructor(ctk.CTkFrame):
 # Permite probar este archivo solo: python constructor.py
 # ---------------------------------------------------------------------------
 if __name__ == "__main__":
+
     ctk.set_appearance_mode("light")
     ctk.set_default_color_theme("blue")
 
@@ -648,11 +649,24 @@ if __name__ == "__main__":
     ventana.title("Speakly - Constructor de oraciones (prueba aislada)")
     ventana.geometry("950x680")
 
+
+    usuario = {
+        "nombre": "Jhoel"
+    }
+
+
     def simular_siguiente_verbo(verbo):
         print(f"[DEBUG] Verbo '{verbo}' completado.")
 
-    pantalla = PantallaConstructor(ventana, usuario="invitado",
-        al_completar_verbo=simular_siguiente_verbo)
+
+    pantalla = PantallaConstructor(
+        ventana,
+        usuario=usuario["nombre"],
+        al_completar_verbo=simular_siguiente_verbo
+    )
+
+
     pantalla.pack(fill="both", expand=True)
+
 
     ventana.mainloop()

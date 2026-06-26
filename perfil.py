@@ -2,6 +2,7 @@ import customtkinter as ctk
 from PIL import Image
 from tkinter import filedialog
 import shutil, os
+import json
 
 class PerfilUsuario(ctk.CTkFrame):
     def __init__(self, master, usuario, **kwargs):
@@ -135,13 +136,50 @@ class PerfilUsuario(ctk.CTkFrame):
         self.master.destroy()
 
     def cambiar_foto(self):
-        ruta = filedialog.askopenfilename(filetypes=[("Imagenes", "*.png *.jpg *.jpeg")])
+        ruta = filedialog.askopenfilename(
+            filetypes=[("Imagenes", "*.png *.jpg *.jpeg")]
+        )
+
         if ruta:
-            nombre_usuario = self.usuario.get("nombre", "usuario").lower().replace(" ", "_")
+            usuario = self.usuario.get("usuario", "usuario")
             extension = os.path.splitext(ruta)[1]
-            destino = os.path.join("imagenes", f"foto_{nombre_usuario}{extension}")
+
+            # carpeta donde se guardan perfiles
+            os.makedirs("perfiles", exist_ok=True)
+
+            destino = os.path.join(
+                "perfiles",
+                f"{usuario}{extension}"
+            )
+
             shutil.copy2(ruta, destino)
+
+            # actualizar usuario actual
             self.usuario["foto"] = destino
-            nueva_img = ctk.CTkImage(Image.open(destino), size=(100, 100))
+
+            # guardar en JSON
+            self.guardar_usuario()
+
+            # actualizar imagen visual
+            nueva_img = ctk.CTkImage(
+                Image.open(destino),
+                size=(100,100)
+            )
+
             self.foto_btn.configure(image=nueva_img)
             self.foto_img = nueva_img
+
+    def guardar_usuario(self):
+        with open("usuarios.json", "r") as archivo:
+            usuarios = json.load(archivo)
+
+        for u in usuarios:
+            if u["usuario"] == self.usuario["usuario"]:
+                u["foto"] = self.usuario["foto"]
+
+        with open("usuarios.json", "w") as archivo:
+            json.dump(
+                usuarios,
+                archivo,
+                indent=4
+            )        

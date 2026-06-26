@@ -1,3 +1,17 @@
 __pycache__/
 *.pyc
 *.pyo
+
+# Datos privados de usuarios
+usuarios.json
+
+# Fotos de usuarios
+perfiles/
+
+# Archivos temporales de Python
+__pycache__/
+*.pyc
+
+# Configuraciones de editores (opcional)
+.vscode/
+.idea/
