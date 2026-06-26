@@ -4,7 +4,7 @@
 # Este archivo lo puede leer progreso.py junto con progreso_vocabulario.txt
 # para armar la barra de porcentaje y la lista de "verbos debiles".
 # No editar a mano.
-invitado|play|presente|correcto|3|30
+invitado|play|presente|correcto|4|40
 invitado|play|pasado|correcto|1|10
 invitado|play|futuro|correcto|1|10
 invitado|eat|presente|correcto|1|10
