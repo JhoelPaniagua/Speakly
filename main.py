@@ -2,6 +2,9 @@ import customtkinter as ctk
 from perfil import PerfilUsuario
 from PIL import Image
 
+from aprender import PantallaAprender
+from constructor import PantallaConstructor
+
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("blue")
 
@@ -11,7 +14,9 @@ class App(ctk.CTk):
 
         self.title("Speakly")
         self.geometry("1000x600")
-        self.resizable(False, False)
+        self.resizable(True, True)
+        self.state("normal")
+
 
         self.grid_columnconfigure(0, weight=0)
         self.grid_columnconfigure(1, weight=1)
@@ -55,7 +60,7 @@ class App(ctk.CTk):
         self.btn_vocabulary = ctk.CTkButton(self.barra, text="📚  Vocabulary",
             font=("Arial", 14), anchor="w",
             fg_color="transparent", text_color="white", hover_color="#FFA626", height=55, corner_radius=20,
-            command=lambda: self.cargar_texto("📚 Aquí va Aprender"))
+            command=self.mostrar_aprender)
         self.btn_vocabulary.pack(pady=3, padx=15, fill="x")
 
         self.separador = ctk.CTkFrame(self.barra, height=2, fg_color="#FCA327")
@@ -177,6 +182,16 @@ class App(ctk.CTk):
 
     def cerrar_sesion(self):
         self.cargar_texto("🚪 Sesión cerrada")
+
+    def mostrar_aprender(self):
+        self.limpiar_contenido()
+        pantalla = PantallaAprender(self.contenido, usuario="Jhoel")
+        pantalla.pack(fill="both", expand=True)
+
+    def mostrar_constructor(self):
+        self.limpiar_contenido()
+        pantalla = PantallaConstructor(self.contenido, usuario="Jhoel")
+        pantalla.pack(fill="both", expand=True)    
 
 
 if __name__ == "__main__":

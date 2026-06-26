@@ -47,7 +47,7 @@ class PantallaAprender(ctk.CTkFrame):
 
     def crear_contenedor_principal(self):
         self.contenido = ctk.CTkFrame(self, fg_color="transparent")
-        self.contenido.pack(side="right", fill="both", expand=True, padx=40, pady=30)
+        self.contenido.pack(side="right", fill="both", expand=True, padx=20, pady=15)
         
         header_frame = ctk.CTkFrame(self.contenido, fg_color="transparent")
         header_frame.pack(fill="x")
@@ -69,7 +69,7 @@ class PantallaAprender(ctk.CTkFrame):
         bloque_interactivo.pack(fill="both", expand=True)
         
         # Tarjeta Izquierda 
-        self.card_palabra = ctk.CTkFrame(bloque_interactivo, fg_color="white", corner_radius=15, width=600)
+        self.card_palabra = ctk.CTkFrame(bloque_interactivo, fg_color="white", corner_radius=15, width=380)
         self.card_palabra.pack(side="left", fill="both", expand=True, padx=(0, 20))
         self.card_palabra.pack_propagate(False)
         
@@ -85,7 +85,7 @@ class PantallaAprender(ctk.CTkFrame):
         self.btn_audio.pack(anchor="w")
         
         # Tarjeta Derecha (Input y Check)
-        col_derecha = ctk.CTkFrame(bloque_interactivo, fg_color="transparent", width=350)
+        col_derecha = ctk.CTkFrame(bloque_interactivo, fg_color="transparent", width=250)
         col_derecha.pack(side="right", fill="both", padx=(20, 0))
         col_derecha.pack_propagate(False)
         
@@ -121,7 +121,7 @@ class PantallaAprender(ctk.CTkFrame):
         
         if os.path.exists(ruta_completa_img):
             img_pil = Image.open(ruta_completa_img)
-            img_ctk = ctk.CTkImage(light_image=img_pil, size=(520, 450))
+            img_ctk = ctk.CTkImage(light_image=img_pil, size=(320, 280))
             self.lbl_imagen.configure(image=img_ctk, text="")
         else:
             self.lbl_imagen.configure(image=None, text=f"[No se encontró: {ruta_completa_img}]")
