@@ -50,14 +50,23 @@ class App(ctk.CTk):
             command=self.abrir_perfil, height=65, corner_radius=20)
         self.usuario_frame.pack(pady=(3, 3), padx=15, fill="x")
 
+        # Cargar íconos
+        ico_home       = ctk.CTkImage(Image.open("imagenes/home.png"),    size=(22, 22))
+        ico_vocabulary = ctk.CTkImage(Image.open("imagenes/libros.png"),  size=(22, 22))
+        ico_ranking    = ctk.CTkImage(Image.open("imagenes/trofeo.png"),  size=(22, 22))
+        ico_logout     = ctk.CTkImage(Image.open("imagenes/door.png"),    size=(32, 32)) 
+        ico_fire       = ctk.CTkImage(Image.open("imagenes/flamita.png"), size=(28, 28))
+        ico_books      = ctk.CTkImage(Image.open("imagenes/libros.png"),  size=(28, 28))
+
+
         # Botones navegación
-        self.btn_home = ctk.CTkButton(self.barra, text="🏠  Home",
-            font=("Arial", 14), anchor="w",
+        self.btn_home = ctk.CTkButton(self.barra, text="  Home", image=ico_home,
+            font=("Arial", 14), anchor="w", compound="left",
             fg_color="white", text_color="#FF8C00", hover_color="#FFA626", height=55, corner_radius=20,
             command=self.mostrar_home)
         self.btn_home.pack(pady=(3, 3), padx=15, fill="x")
 
-        self.btn_vocabulary = ctk.CTkButton(self.barra, text="📚  Vocabulary",
+        self.btn_vocabulary = ctk.CTkButton(self.barra, text="  Vocabulary", image=ico_vocabulary,
             font=("Arial", 14), anchor="w",
             fg_color="transparent", text_color="white", hover_color="#FFA626", height=55, corner_radius=20,
             command=self.mostrar_aprender)
@@ -66,7 +75,7 @@ class App(ctk.CTk):
         self.separador = ctk.CTkFrame(self.barra, height=2, fg_color="#FCA327")
         self.separador.pack(fill="x", padx=15, pady=5)
 
-        self.btn_ranking = ctk.CTkButton(self.barra, text="🏆  Ranking",
+        self.btn_ranking = ctk.CTkButton(self.barra, text="  Ranking", image=ico_ranking,
             font=("Arial", 14), anchor="w",
             fg_color="transparent", text_color="white", hover_color="#FFA626", height=55, corner_radius=20,
             command=lambda: self.cargar_texto("🏆 Aquí va el Ranking"))
@@ -78,16 +87,18 @@ class App(ctk.CTk):
 
         self.cuadro_racha = ctk.CTkFrame(self.stats_frame, corner_radius=10, fg_color="#ff9626", height=70)
         self.cuadro_racha.pack(side="left", padx=(0, 5), expand=True, fill="both")
-        ctk.CTkLabel(self.cuadro_racha, text="🔥\n7 days", font=("Arial", 12, "bold"), text_color="white").pack(expand=True)
+        ctk.CTkLabel(self.cuadro_racha, image=ico_fire, text="7 days",
+            compound="top", font=("Arial", 11, "bold"), text_color="white").pack(expand=True)
 
         self.cuadro_verbos = ctk.CTkFrame(self.stats_frame, corner_radius=10, fg_color="#ff9626", height=70)
         self.cuadro_verbos.pack(side="left", padx=(5, 0), expand=True, fill="both")
-        ctk.CTkLabel(self.cuadro_verbos, text="📚\n0/16", font=("Arial", 12, "bold"), text_color="white").pack(expand=True)
+        ctk.CTkLabel(self.cuadro_verbos, image=ico_books, text="0/16",
+            compound="top", font=("Arial", 11, "bold"), text_color="white").pack(expand=True)
 
         # Log out y KODA
         ctk.CTkLabel(self.barra, text="").pack(expand=True, fill="both")
 
-        self.btn_logout = ctk.CTkButton(self.barra, text="🚪  Log out",
+        self.btn_logout = ctk.CTkButton(self.barra, text="  Log out", image=ico_logout,
             font=("Arial", 14), anchor="w",
             fg_color="transparent", text_color="white", hover_color="#FF7B00", height=50, corner_radius=20,
             command=self.cerrar_sesion)
