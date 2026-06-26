@@ -26,7 +26,7 @@ class App(ctk.CTk):
         self.crear_area_contenido()
 
     def crear_barra_lateral(self):
-        self.barra = ctk.CTkScrollableFrame(self, width=250, corner_radius=0, fg_color="#FF9600")
+        self.barra = ctk.CTkScrollableFrame(self, width=230, corner_radius=0, fg_color="#FF9600")
         self.barra._scrollbar.grid_remove()
         self.barra.grid(row=0, column=0, sticky="nsew")
 
@@ -183,15 +183,25 @@ class App(ctk.CTk):
     def cerrar_sesion(self):
         self.cargar_texto("🚪 Sesión cerrada")
 
-    def mostrar_aprender(self):
+    def mostrar_aprender(self, indice_verbo=0):
         self.limpiar_contenido()
-        pantalla = PantallaAprender(self.contenido, usuario="Jhoel")
+        pantalla = PantallaAprender(
+        self.contenido,
+        usuario="Jhoel",
+        indice_inicial=indice_verbo,
+        al_completar=self.mostrar_constructor
+        )
         pantalla.pack(fill="both", expand=True)
 
-    def mostrar_constructor(self):
+    def mostrar_constructor(self, indice_verbo):
         self.limpiar_contenido()
-        pantalla = PantallaConstructor(self.contenido, usuario="Jhoel")
-        pantalla.pack(fill="both", expand=True)    
+        pantalla = PantallaConstructor(
+        self.contenido,
+        usuario="Jhoel",
+        indice_inicial=indice_verbo,
+        al_completar_verbo=lambda verbo: self.mostrar_aprender(indice_verbo + 1)
+        )
+        pantalla.pack(fill="both", expand=True) 
 
 
 if __name__ == "__main__":

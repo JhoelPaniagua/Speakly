@@ -8,9 +8,11 @@ ctk.set_appearance_mode("Light")
 ctk.set_default_color_theme("blue")
 
 class PantallaAprender(ctk.CTkFrame):
-    def __init__(self, master, usuario, **kwargs):
+    def __init__(self, master, usuario, indice_inicial=0, al_completar=None, **kwargs):
         super().__init__(master, fg_color="#FFF5EC", **kwargs)
         self.usuario = usuario
+        self.al_completar = al_completar
+        self.indice_actual = indice_inicial
         
         # Banco de datos 
         self.vocabulario = [
@@ -147,7 +149,9 @@ class PantallaAprender(ctk.CTkFrame):
             self.lbl_feedback.configure(text=f"Incorrect. Try again.", text_color="#E74C3C")
 
     def siguiente_pregunta(self):
-        if self.indice_actual < 15:
+        if self.al_completar:
+            self.al_completar(self.indice_actual)  # va al constructor con este verbo
+        elif self.indice_actual < 15:
             self.indice_actual += 1
             self.cargar_pregunta()
         else:
