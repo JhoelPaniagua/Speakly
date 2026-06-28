@@ -2,10 +2,14 @@ import customtkinter as ctk
 from PIL import Image
 import winsound  # Librería nativa de Windows para audio
 import os
+import json
 
 # Configuración inicial de la interfaz
 ctk.set_appearance_mode("Light")  
 ctk.set_default_color_theme("blue")
+
+RUTA_BASE = os.path.dirname(os.path.abspath(__file__))
+RUTA_VERBOS_JSON = os.path.join(RUTA_BASE, "datos", "verbos.json")
 
 class PantallaAprender(ctk.CTkFrame):
     def __init__(self, master, usuario, indice_inicial=0, al_completar=None, **kwargs):
@@ -13,58 +17,56 @@ class PantallaAprender(ctk.CTkFrame):
         self.usuario = usuario
         self.al_completar = al_completar
         self.indice_actual = indice_inicial
-        
-        # Banco de datos 
-        self.vocabulario = [
-            {"en": "play", "es": "Jugar", "img": "1.jpg", "audio": "play.wav"},
-            {"en": "eat", "es": "Comer", "img": "2.jpg", "audio": "eat.wav"},
-            {"en": "read", "es": "Leer", "img": "3.jpg", "audio": "read.wav"},
-            {"en": "sing", "es": "Cantar", "img": "4.jpg", "audio": "sing.wav"},
-            {"en": "write", "es": "Escribir", "img": "5.jpg", "audio": "write.wav"},
-            {"en": "sleep", "es": "Dormir", "img": "6.jpg", "audio": "sleep.wav"},
-            {"en": "run", "es": "Correr", "img": "7.jpg", "audio": "run.wav"},
-            {"en": "talk", "es": "Hablar", "img": "8.jpg", "audio": "talk.wav"},
-            {"en": "dance", "es": "Bailar", "img": "9.jpg", "audio": "dance.wav"},
-            {"en": "listen", "es": "Escuchar", "img": "10.jpg", "audio": "listen.wav"},
-            {"en": "speak", "es": "Hablar", "img": "11.jpg", "audio": "speak.wav"},
-            {"en": "ask", "es": "Preguntar", "img": "12.jpg", "audio": "ask.wav"},
-            {"en": "answer", "es": "Responder", "img": "13.jpg", "audio": "answer.wav"},
-            {"en": "learn", "es": "Aprender", "img": "14.jpg", "audio": "learn.wav"},
-            {"en": "teach", "es": "Enseñar", "img": "15.jpg", "audio": "teach.wav"},
-            {"en": "practice", "es": "Practicar", "img": "16.jpg", "audio": "practice.wav"}
-        ]
 
-        self.carpeta_imagenes = "imagenes"
-        self.carpeta_audios = "audios"
-        
-        # Dibujar los componentes
-        
+        # cargar verbos desde JSON
+        with open(RUTA_VERBOS_JSON, "r", encoding="utf-8") as f:
+            datos_json = json.load(f)
+
+        self.vocabulario = []
+        for i, (verbo, info) in enumerate(datos_json.items()):
+            self.vocabulario.append({
+                "en": verbo,
+                "es": info.get("espanol", verbo),
+                "img": info.get("imagen", f"{i+1}.jpg"),
+                "audio": f"{verbo}.wav",
+            })
+
+        self.total = len(self.vocabulario)
+        self.carpeta_imagenes = os.path.join(RUTA_BASE, "imagenes_verbos")
+        self.carpeta_audios = os.path.join(RUTA_BASE, "audios")  
+
         self.crear_contenedor_principal()
-        
-        # Cargar primera pregunta
-        self.cargar_pregunta()
+        self.cargar_pregunta()          # ← AQUÍ, después de crear todos los widgets
 
     
 
     def crear_contenedor_principal(self):
         self.contenido = ctk.CTkFrame(self, fg_color="transparent")
         self.contenido.pack(side="right", fill="both", expand=True, padx=20, pady=15)
-        
+
         header_frame = ctk.CTkFrame(self.contenido, fg_color="transparent")
         header_frame.pack(fill="x")
-        
-        title_vocab = ctk.CTkLabel(header_frame, text="Vocabulary - Word", font=("Arial Black", 22), text_color="#1E3050")
+
+        title_vocab = ctk.CTkLabel(header_frame, text="Vocabulary - Word",
+            font=("Arial Black", 22), text_color="#1E3050")
         title_vocab.pack(side="left")
-        
-        self.lbl_contador = ctk.CTkLabel(header_frame, text="1/16", font=("Arial Bold", 14), text_color="#A0A0A0")
+
+        # ← Solo se CREA el widget, sin configurar texto aún
+        self.lbl_contador = ctk.CTkLabel(header_frame, text="",
+            font=("Arial Bold", 14), text_color="#A0A0A0")
         self.lbl_contador.pack(side="right")
-        
-        sub_vocab = ctk.CTkLabel(self.contenido, text="Look at the English word and write it in Spanish", font=("Arial", 13), text_color="#A0A0A0")
+
+        sub_vocab = ctk.CTkLabel(self.contenido,
+            text="Look at the English word and write it in Spanish",
+            font=("Arial", 13), text_color="#A0A0A0")
         sub_vocab.pack(anchor="w", pady=(0, 20))
-        
-        self.progreso = ctk.CTkProgressBar(self.contenido, progress_color="#FF9209", fg_color="#E0E0E0", height=6)
+
+        self.progreso = ctk.CTkProgressBar(self.contenido,
+            progress_color="#FF9209", fg_color="#E0E0E0", height=6)
         self.progreso.pack(fill="x", pady=(0, 30))
-        self.progreso.set(1/16)
+        self.progreso.set(0)            # ← valor neutro, cargar_pregunta lo actualizará
+
+    
         
         bloque_interactivo = ctk.CTkFrame(self.contenido, fg_color="transparent")
         bloque_interactivo.pack(fill="both", expand=True)
@@ -106,26 +108,26 @@ class PantallaAprender(ctk.CTkFrame):
         self.lbl_feedback.pack(pady=10)
 
     def cargar_pregunta(self):
-        # Limpiar feedback e input anterior
         self.lbl_feedback.configure(text="")
         self.input_respuesta.delete(0, 'end')
         self.input_respuesta.configure(border_color="#FFB067")
-        self.btn_check.configure(text="Check", fg_color="#FF9209", command=self.verificar_respuesta)
-        
+        self.btn_check.configure(text="Check", fg_color="#FF9209",
+            command=self.verificar_respuesta)
+
         datos = self.vocabulario[self.indice_actual]
-        
-        # Actualizar textos del contador y barra de progreso
-        self.lbl_contador.configure(text=f"{self.indice_actual + 1}/16")
-        self.progreso.set((self.indice_actual + 1) / 16)
-        
-        ruta_completa_img = os.path.join(self.carpeta_imagenes, datos["img"])
-        
-        if os.path.exists(ruta_completa_img):
-            img_pil = Image.open(ruta_completa_img)
+
+        # Estos configure() ahora son seguros porque el widget ya existe
+        self.lbl_contador.configure(text=f"{self.indice_actual + 1}/{self.total}")
+        self.progreso.set((self.indice_actual + 1) / self.total)
+
+        ruta_img = os.path.join(self.carpeta_imagenes, datos["img"])
+        if os.path.exists(ruta_img):
+            img_pil = Image.open(ruta_img)
             img_ctk = ctk.CTkImage(light_image=img_pil, size=(320, 280))
             self.lbl_imagen.configure(image=img_ctk, text="")
         else:
-            self.lbl_imagen.configure(image=None, text=f"[No se encontró: {ruta_completa_img}]")
+            self.lbl_imagen.configure(image=None,
+                text=f"[No imagen: {datos['img']}]")
 
     def reproducir_audio(self):
         ruta_completa_audio = os.path.join(self.carpeta_audios, self.vocabulario[self.indice_actual]["audio"])
@@ -148,13 +150,18 @@ class PantallaAprender(ctk.CTkFrame):
             self.lbl_feedback.configure(text=f"Incorrect. Try again.", text_color="#E74C3C")
 
     def siguiente_pregunta(self):
+        verbo_actual = self.vocabulario[self.indice_actual]["en"]  # ← nombre del verbo
+
         if self.al_completar:
-            self.al_completar(self.indice_actual)  # va al constructor con este verbo
-        elif self.indice_actual < 15:
+            self.al_completar(verbo_actual)  # ← pasa el STRING, no el índice
+        elif self.indice_actual < self.total - 1:
             self.indice_actual += 1
             self.cargar_pregunta()
         else:
-            self.lbl_feedback.configure(text="¡Felicidades! Has completado las 16 palabras.", text_color="#FF9209")
+            self.lbl_feedback.configure(
+                text="¡Felicidades! Has completado todas las palabras.",
+                text_color="#FF9209"
+            )
             self.btn_check.configure(state="disabled", text="Terminado")
 
 if __name__ == "__main__":

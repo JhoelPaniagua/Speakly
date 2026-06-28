@@ -1,0 +1,738 @@
+{
+    "play": {
+        "espanol": "jugar",
+        "imagen": "play.jpg",
+        "oraciones": {
+            "presente": {
+                "frase": "Ellos juegan futbol",
+                "correcta": [
+                    "They",
+                    "play",
+                    "soccer"
+                ],
+                "distractores": [
+                    "played",
+                    "will",
+                    "read"
+                ]
+            },
+            "pasado": {
+                "frase": "Yo jugue tenis",
+                "correcta": [
+                    "I",
+                    "played",
+                    "tennis"
+                ],
+                "distractores": [
+                    "play",
+                    "will",
+                    "sing"
+                ]
+            },
+            "futuro": {
+                "frase": "Nosotros jugaremos basquetbol",
+                "correcta": [
+                    "We",
+                    "will",
+                    "play",
+                    "basketball"
+                ],
+                "distractores": [
+                    "played",
+                    "playing",
+                    "read"
+                ]
+            }
+        }
+    },
+    "eat": {
+        "espanol": "comer",
+        "imagen": "eat.jpg",
+        "oraciones": {
+            "presente": {
+                "frase": "Ella come el desayuno",
+                "correcta": [
+                    "She",
+                    "eats",
+                    "breakfast"
+                ],
+                "distractores": [
+                    "ate",
+                    "will",
+                    "write"
+                ]
+            },
+            "pasado": {
+                "frase": "Yo comi pizza",
+                "correcta": [
+                    "I",
+                    "ate",
+                    "pizza"
+                ],
+                "distractores": [
+                    "eat",
+                    "will",
+                    "dance"
+                ]
+            },
+            "futuro": {
+                "frase": "Ellos comeran la cena",
+                "correcta": [
+                    "They",
+                    "will",
+                    "eat",
+                    "dinner"
+                ],
+                "distractores": [
+                    "ate",
+                    "eating",
+                    "sleep"
+                ]
+            }
+        }
+    },
+    "read": {
+        "espanol": "leer",
+        "imagen": "read.jpg",
+        "oraciones": {
+            "presente": {
+                "frase": "El lee libros",
+                "correcta": [
+                    "He",
+                    "reads",
+                    "books"
+                ],
+                "distractores": [
+                    "read",
+                    "will",
+                    "sing"
+                ]
+            },
+            "pasado": {
+                "frase": "Tu leiste revistas",
+                "correcta": [
+                    "You",
+                    "read",
+                    "magazines"
+                ],
+                "distractores": [
+                    "reads",
+                    "will",
+                    "eat"
+                ]
+            },
+            "futuro": {
+                "frase": "Nosotros leeremos historias",
+                "correcta": [
+                    "We",
+                    "will",
+                    "read",
+                    "stories"
+                ],
+                "distractores": [
+                    "reads",
+                    "reading",
+                    "play"
+                ]
+            }
+        }
+    },
+    "sing": {
+        "espanol": "cantar",
+        "imagen": "sing.jpg",
+        "oraciones": {
+            "presente": {
+                "frase": "Yo canto canciones",
+                "correcta": [
+                    "I",
+                    "sing",
+                    "songs"
+                ],
+                "distractores": [
+                    "sang",
+                    "will",
+                    "write"
+                ]
+            },
+            "pasado": {
+                "frase": "Ella canto jazz",
+                "correcta": [
+                    "She",
+                    "sang",
+                    "jazz"
+                ],
+                "distractores": [
+                    "sings",
+                    "will",
+                    "run"
+                ]
+            },
+            "futuro": {
+                "frase": "Ellos cantaran opera",
+                "correcta": [
+                    "They",
+                    "will",
+                    "sing",
+                    "opera"
+                ],
+                "distractores": [
+                    "sang",
+                    "singing",
+                    "read"
+                ]
+            }
+        }
+    },
+    "write": {
+        "espanol": "escribir",
+        "imagen": "write.jpg",
+        "oraciones": {
+            "presente": {
+                "frase": "El escribe cartas",
+                "correcta": [
+                    "He",
+                    "writes",
+                    "letters"
+                ],
+                "distractores": [
+                    "wrote",
+                    "will",
+                    "eat"
+                ]
+            },
+            "pasado": {
+                "frase": "Yo escribi poemas",
+                "correcta": [
+                    "I",
+                    "wrote",
+                    "poems"
+                ],
+                "distractores": [
+                    "write",
+                    "will",
+                    "sleep"
+                ]
+            },
+            "futuro": {
+                "frase": "Nosotros escribiremos historias",
+                "correcta": [
+                    "We",
+                    "will",
+                    "write",
+                    "stories"
+                ],
+                "distractores": [
+                    "wrote",
+                    "writing",
+                    "sing"
+                ]
+            }
+        }
+    },
+    "sleep": {
+        "espanol": "dormir",
+        "imagen": "sleep.jpg",
+        "oraciones": {
+            "presente": {
+                "frase": "Ella duerme temprano",
+                "correcta": [
+                    "She",
+                    "sleeps",
+                    "early"
+                ],
+                "distractores": [
+                    "slept",
+                    "will",
+                    "read"
+                ]
+            },
+            "pasado": {
+                "frase": "Yo dormi tarde",
+                "correcta": [
+                    "I",
+                    "slept",
+                    "late"
+                ],
+                "distractores": [
+                    "sleep",
+                    "will",
+                    "talk"
+                ]
+            },
+            "futuro": {
+                "frase": "Ellos dormiran afuera",
+                "correcta": [
+                    "They",
+                    "will",
+                    "sleep",
+                    "outside"
+                ],
+                "distractores": [
+                    "slept",
+                    "sleeping",
+                    "sing"
+                ]
+            }
+        }
+    },
+    "run": {
+        "espanol": "correr",
+        "imagen": "run.jpg",
+        "oraciones": {
+            "presente": {
+                "frase": "El corre rapido",
+                "correcta": [
+                    "He",
+                    "runs",
+                    "fast"
+                ],
+                "distractores": [
+                    "ran",
+                    "will",
+                    "eat"
+                ]
+            },
+            "pasado": {
+                "frase": "Yo corri ayer",
+                "correcta": [
+                    "I",
+                    "ran",
+                    "yesterday"
+                ],
+                "distractores": [
+                    "run",
+                    "will",
+                    "dance"
+                ]
+            },
+            "futuro": {
+                "frase": "Nosotros correremos mañana",
+                "correcta": [
+                    "We",
+                    "will",
+                    "run",
+                    "tomorrow"
+                ],
+                "distractores": [
+                    "ran",
+                    "running",
+                    "sleep"
+                ]
+            }
+        }
+    },
+    "talk": {
+        "espanol": "hablar",
+        "imagen": "talk.jpg",
+        "oraciones": {
+            "presente": {
+                "frase": "Ellos hablan fuerte",
+                "correcta": [
+                    "They",
+                    "talk",
+                    "loudly"
+                ],
+                "distractores": [
+                    "talked",
+                    "will",
+                    "read"
+                ]
+            },
+            "pasado": {
+                "frase": "Yo hable ayer",
+                "correcta": [
+                    "I",
+                    "talked",
+                    "yesterday"
+                ],
+                "distractores": [
+                    "talk",
+                    "will",
+                    "sleep"
+                ]
+            },
+            "futuro": {
+                "frase": "Nosotros hablaremos despues",
+                "correcta": [
+                    "We",
+                    "will",
+                    "talk",
+                    "later"
+                ],
+                "distractores": [
+                    "talked",
+                    "talking",
+                    "eat"
+                ]
+            }
+        }
+    },
+    "dance": {
+        "espanol": "bailar",
+        "imagen": "dance.jpg",
+        "oraciones": {
+            "presente": {
+                "frase": "Ella baila con gracia",
+                "correcta": [
+                    "She",
+                    "dances",
+                    "gracefully"
+                ],
+                "distractores": [
+                    "danced",
+                    "will",
+                    "run"
+                ]
+            },
+            "pasado": {
+                "frase": "Yo baile salsa",
+                "correcta": [
+                    "I",
+                    "danced",
+                    "salsa"
+                ],
+                "distractores": [
+                    "dance",
+                    "will",
+                    "sing"
+                ]
+            },
+            "futuro": {
+                "frase": "Ellos bailaran esta noche",
+                "correcta": [
+                    "They",
+                    "will",
+                    "dance",
+                    "tonight"
+                ],
+                "distractores": [
+                    "danced",
+                    "dancing",
+                    "talk"
+                ]
+            }
+        }
+    },
+    "listen": {
+        "espanol": "escuchar",
+        "imagen": "listen.jpg",
+        "oraciones": {
+            "presente": {
+                "frase": "El escucha con atencion",
+                "correcta": [
+                    "He",
+                    "listens",
+                    "carefully"
+                ],
+                "distractores": [
+                    "listened",
+                    "will",
+                    "eat"
+                ]
+            },
+            "pasado": {
+                "frase": "Yo escuche ayer",
+                "correcta": [
+                    "I",
+                    "listened",
+                    "yesterday"
+                ],
+                "distractores": [
+                    "listen",
+                    "will",
+                    "write"
+                ]
+            },
+            "futuro": {
+                "frase": "Nosotros escucharemos mañana",
+                "correcta": [
+                    "We",
+                    "will",
+                    "listen",
+                    "tomorrow"
+                ],
+                "distractores": [
+                    "listened",
+                    "listening",
+                    "run"
+                ]
+            }
+        }
+    },
+    "speak": {
+        "espanol": "hablar",
+        "imagen": "speak.jpg",
+        "oraciones": {
+            "presente": {
+                "frase": "Ella habla ingles",
+                "correcta": [
+                    "She",
+                    "speaks",
+                    "English"
+                ],
+                "distractores": [
+                    "spoke",
+                    "will",
+                    "sleep"
+                ]
+            },
+            "pasado": {
+                "frase": "Yo hable español",
+                "correcta": [
+                    "I",
+                    "spoke",
+                    "Spanish"
+                ],
+                "distractores": [
+                    "speak",
+                    "will",
+                    "dance"
+                ]
+            },
+            "futuro": {
+                "frase": "Ellos hablaran frances",
+                "correcta": [
+                    "They",
+                    "will",
+                    "speak",
+                    "French"
+                ],
+                "distractores": [
+                    "spoke",
+                    "speaking",
+                    "read"
+                ]
+            }
+        }
+    },
+    "ask": {
+        "espanol": "preguntar",
+        "imagen": "ask.jpg",
+        "oraciones": {
+            "presente": {
+                "frase": "El pregunta cosas",
+                "correcta": [
+                    "He",
+                    "asks",
+                    "questions"
+                ],
+                "distractores": [
+                    "asked",
+                    "will",
+                    "sing"
+                ]
+            },
+            "pasado": {
+                "frase": "Yo pregunte ayer",
+                "correcta": [
+                    "I",
+                    "asked",
+                    "yesterday"
+                ],
+                "distractores": [
+                    "ask",
+                    "will",
+                    "talk"
+                ]
+            },
+            "futuro": {
+                "frase": "Nosotros preguntaremos mañana",
+                "correcta": [
+                    "We",
+                    "will",
+                    "ask",
+                    "tomorrow"
+                ],
+                "distractores": [
+                    "asked",
+                    "asking",
+                    "eat"
+                ]
+            }
+        }
+    },
+    "answer": {
+        "espanol": "responder",
+        "imagen": "answer.jpg",
+        "oraciones": {
+            "presente": {
+                "frase": "Ella responde rapido",
+                "correcta": [
+                    "She",
+                    "answers",
+                    "quickly"
+                ],
+                "distractores": [
+                    "answered",
+                    "will",
+                    "run"
+                ]
+            },
+            "pasado": {
+                "frase": "Yo respondi correctamente",
+                "correcta": [
+                    "I",
+                    "answered",
+                    "correctly"
+                ],
+                "distractores": [
+                    "answer",
+                    "will",
+                    "dance"
+                ]
+            },
+            "futuro": {
+                "frase": "Ellos responderan pronto",
+                "correcta": [
+                    "They",
+                    "will",
+                    "answer",
+                    "soon"
+                ],
+                "distractores": [
+                    "answered",
+                    "answering",
+                    "sleep"
+                ]
+            }
+        }
+    },
+    "learn": {
+        "espanol": "aprender",
+        "imagen": "learn.jpg",
+        "oraciones": {
+            "presente": {
+                "frase": "El aprende rapido",
+                "correcta": [
+                    "He",
+                    "learns",
+                    "quickly"
+                ],
+                "distractores": [
+                    "learned",
+                    "will",
+                    "talk"
+                ]
+            },
+            "pasado": {
+                "frase": "Yo aprendi ingles",
+                "correcta": [
+                    "I",
+                    "learned",
+                    "English"
+                ],
+                "distractores": [
+                    "learn",
+                    "will",
+                    "sing"
+                ]
+            },
+            "futuro": {
+                "frase": "Nosotros aprenderemos español",
+                "correcta": [
+                    "We",
+                    "will",
+                    "learn",
+                    "Spanish"
+                ],
+                "distractores": [
+                    "learned",
+                    "learning",
+                    "read"
+                ]
+            }
+        }
+    },
+    "teach": {
+        "espanol": "enseñar",
+        "imagen": "teach.jpg",
+        "oraciones": {
+            "presente": {
+                "frase": "Ella enseña estudiantes",
+                "correcta": [
+                    "She",
+                    "teaches",
+                    "students"
+                ],
+                "distractores": [
+                    "taught",
+                    "will",
+                    "learn"
+                ]
+            },
+            "pasado": {
+                "frase": "El enseño ciencias",
+                "correcta": [
+                    "He",
+                    "taught",
+                    "science"
+                ],
+                "distractores": [
+                    "teaches",
+                    "will",
+                    "dance"
+                ]
+            },
+            "futuro": {
+                "frase": "Nosotros enseñaremos matematicas",
+                "correcta": [
+                    "We",
+                    "will",
+                    "teach",
+                    "math"
+                ],
+                "distractores": [
+                    "taught",
+                    "teaching",
+                    "sleep"
+                ]
+            }
+        }
+    },
+    "practice": {
+        "espanol": "practicar",
+        "imagen": "practice.jpg",
+        "oraciones": {
+            "presente": {
+                "frase": "Ellos practican diario",
+                "correcta": [
+                    "They",
+                    "practice",
+                    "daily"
+                ],
+                "distractores": [
+                    "practiced",
+                    "will",
+                    "play"
+                ]
+            },
+            "pasado": {
+                "frase": "Yo practique piano",
+                "correcta": [
+                    "I",
+                    "practiced",
+                    "piano"
+                ],
+                "distractores": [
+                    "practices",
+                    "practice",
+                    "songs"
+                ]
+            },
+            "futuro": {
+                "frase": "Nosotros practicaremos guitarra",
+                "correcta": [
+                    "We",
+                    "will",
+                    "practice",
+                    "guitar"
+                ],
+                "distractores": [
+                    "practiced",
+                    "practicing",
+                    "music"
+                ]
+            }
+        }
+    }
+}

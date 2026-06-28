@@ -28,14 +28,23 @@ class PerfilUsuario(ctk.CTkFrame):
             text_color="white", command=self.cerrar_todo)
         self.btn_cerrar.place(relx=1.0, x=-25, y=20, anchor="ne")
 
-        # Foto de perfil — línea que faltaba
+        # Foto de perfil — izquierda
         ruta_foto = self.usuario.get("foto", "imagenes/usuario_pred.png") or "imagenes/usuario_pred.png"
         self.foto_img = ctk.CTkImage(Image.open(ruta_foto), size=(100, 100))
+
         self.foto_btn = ctk.CTkButton(self.header, image=self.foto_img, text="",
-            width=50, height=50, corner_radius=50,
-            fg_color="#FF9600", hover_color="#FFA011",
+            width=0, height=100, corner_radius=50,
+            fg_color="#FF9600", hover_color="#FF9600",
+            command=lambda: None)
+        self.foto_btn.place(x=0, y=50)  
+
+        # boton "Change photo" al lado derecho de la foto
+        self.btn_cambiar_foto = ctk.CTkButton(self.header, text="📷 Change photo",
+            width=130, height=32, corner_radius=12,
+            fg_color="white", text_color="#FF9600",
+            hover_color="#ffe0c2",
             command=self.cambiar_foto)
-        self.foto_btn.place(x=20, y=45)
+        self.btn_cambiar_foto.place(x=160, y=115)  
 
 
         # Cargar íconos para stats
@@ -141,45 +150,47 @@ class PerfilUsuario(ctk.CTkFrame):
         )
 
         if ruta:
-            usuario = self.usuario.get("usuario", "usuario")
+            usuario = self.usuario.get("usuario", self.usuario.get("nombre", "usuario"))
             extension = os.path.splitext(ruta)[1]
 
-            # carpeta donde se guardan perfiles
             os.makedirs("perfiles", exist_ok=True)
-
-            destino = os.path.join(
-                "perfiles",
-                f"{usuario}{extension}"
-            )
-
+            destino = os.path.join("perfiles", f"{usuario}{extension}")
             shutil.copy2(ruta, destino)
 
-            # actualizar usuario actual
             self.usuario["foto"] = destino
-
-            # guardar en JSON
             self.guardar_usuario()
 
-            # actualizar imagen visual
-            nueva_img = ctk.CTkImage(
-                Image.open(destino),
-                size=(100,100)
-            )
-
+            # actualizar foto en el popup
+            nueva_img = ctk.CTkImage(Image.open(destino), size=(100, 100))
             self.foto_btn.configure(image=nueva_img)
             self.foto_img = nueva_img
 
+            # ← actualizar foto en la barra lateral de main
+            try:
+                # subir dos niveles: CTkToplevel -> App
+                app = self.winfo_toplevel().master
+                nueva_img_barra = ctk.CTkImage(Image.open(destino), size=(45, 45))
+                app.usuario_img = nueva_img_barra
+                app.usuario_frame.configure(image=nueva_img_barra)
+            except Exception as e:
+                print(f"[perfil.py] No se pudo actualizar la barra: {e}")
+
+    
     def guardar_usuario(self):
+        if not os.path.exists("usuarios.json"):
+            return  # ← si no existe el archivo, no hace nada
+
         with open("usuarios.json", "r") as archivo:
             usuarios = json.load(archivo)
 
+        # ← clave flexible: busca por "usuario" o por "nombre"
+        clave_propia = self.usuario.get("usuario", self.usuario.get("nombre", ""))
+
         for u in usuarios:
-            if u["usuario"] == self.usuario["usuario"]:
+            clave_u = u.get("usuario", u.get("nombre", ""))
+            if clave_u == clave_propia:
                 u["foto"] = self.usuario["foto"]
+                break
 
         with open("usuarios.json", "w") as archivo:
-            json.dump(
-                usuarios,
-                archivo,
-                indent=4
-            )        
+            json.dump(usuarios, archivo, indent=4)      

@@ -15,6 +15,7 @@ class App(ctk.CTk):
     def __init__(self, usuario):
         super().__init__()
 
+
         self.usuario = usuario
         self.title("Speakly")
         self.geometry("1000x600")
@@ -185,7 +186,6 @@ class App(ctk.CTk):
         if hasattr(self, 'ventana_perfil') and self.ventana_perfil.winfo_exists():
             return
 
-        # Esperar que la ventana esté lista
         self.update_idletasks()
         
         x = self.winfo_rootx() + self.barra.winfo_width()
@@ -196,14 +196,12 @@ class App(ctk.CTk):
         px = x + (ancho // 2) - 225
         py = y + (alto // 2) - 290
 
-        # Fondo oscuro semitransparente
         self.fondo_oscuro = ctk.CTkToplevel(self)
         self.fondo_oscuro.overrideredirect(True)
         self.fondo_oscuro.geometry(f"{ancho}x{alto}+{x}+{y}")
         self.fondo_oscuro.configure(fg_color="#000000")
         self.fondo_oscuro.attributes("-alpha", 0.4)
 
-        # Popup encima
         self.ventana_perfil = ctk.CTkToplevel(self)
         self.ventana_perfil.overrideredirect(True)
         self.ventana_perfil.geometry(f"450x560+{px}+{py}")
@@ -225,6 +223,12 @@ class App(ctk.CTk):
 
         self.bind("<Configure>", actualizar_posicion)
 
+        # ← limpiar el binding cuando se cierre el popup
+        def al_cerrar_perfil():
+            self.unbind("<Configure>")
+
+        self.ventana_perfil.bind("<Destroy>", lambda e: al_cerrar_perfil())
+
         usuario = self.usuario
         perfil = PerfilUsuario(self.ventana_perfil, usuario)
         perfil.pack(expand=True, fill="both")
@@ -243,26 +247,24 @@ class App(ctk.CTk):
         login = SpeaklyApp()
         login.mainloop()
 
-    def mostrar_aprender(self, indice_verbo=0):
+    def mostrar_aprender(self):                        # ← sin indice_verbo
         self.limpiar_contenido()
         pantalla = PantallaAprender(
             self.contenido,
-            usuario="Jhoel",
-            indice_inicial=indice_verbo,
-            al_completar=self.mostrar_constructor
+            usuario=self.usuario.get("usuario", self.usuario.get("nombre", "")),
+            indice_inicial=0,
+            al_completar=self.mostrar_constructor      # ← recibe el string del verbo
         )
         pantalla.pack(fill="both", expand=True)
 
-    def mostrar_constructor(self, indice_verbo):
+    def mostrar_constructor(self, nombre_verbo):      # ← renombrar parámetro
         self.limpiar_contenido()
         pantalla = PantallaConstructor(
             self.contenido,
-            usuario="Jhoel",
-            indice_inicial=indice_verbo,
-            al_completar_verbo=lambda verbo: self.mostrar_aprender(indice_verbo + 1)
-            # ↑ avanza al siguiente
+            usuario=self.usuario.get("usuario", self.usuario.get("nombre", "")),
+            nombre_verbo_inicial=nombre_verbo          # ← pasar el string
         )
-        pantalla.pack(fill="both", expand=True) 
+        pantalla.pack(fill="both", expand=True)
 
 
 if __name__ == "__main__":

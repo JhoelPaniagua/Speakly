@@ -237,24 +237,30 @@ class PantallaConstructor(ctk.CTkFrame):
     PantallaAprender (ver completar_verbo / ir_a_pantalla_aprender).
     """
 
-    def __init__(self, master, usuario, **kwargs):
+    def __init__(self, master, usuario, indice_inicial=None, nombre_verbo_inicial=None, **kwargs):
         super().__init__(master, fg_color="#FFF5EC", **kwargs)
         self.usuario = usuario
-
         self.datos_verbos, self.orden_verbos = cargar_verbos()
 
-        self.indice_verbo = 0
-        self.indice_tiempo = 0       # 0=presente, 1=pasado, 2=futuro
-        if self.orden_verbos:
+        self.indice_tiempo = 0
+
+        # ← Nueva lógica de punto de partida
+        if nombre_verbo_inicial is not None and nombre_verbo_inicial in self.orden_verbos:
+            self.indice_verbo = self.orden_verbos.index(nombre_verbo_inicial)
+        elif indice_inicial is not None:
+            self.indice_verbo = indice_inicial
+        elif self.orden_verbos:
             self.indice_verbo, self.indice_tiempo = determinar_punto_de_partida(
                 self.usuario, self.orden_verbos)
+        else:
+            self.indice_verbo = 0
 
         self.intentos_actual = 0
-        self.mostrar_error = False   # True solo justo despues de un Check fallido
-        self.revelada = False        # True si se mostro la respuesta tras agotar intentos
+        self.mostrar_error = False
+        self.revelada = False
         self.xp_sesion = 0
         self.ejercicio_actual = None
-        self.imagen_widget_actual = None  # referencia viva para que no la borre el GC
+        self.imagen_widget_actual = None
 
         self.crear_widgets()
 
@@ -451,29 +457,57 @@ class PantallaConstructor(ctk.CTkFrame):
         # --- area de respuesta (dropzone) ---
         color_borde_dropzone = "#c0392b" if self.mostrar_error else "#dddddd"
         dropzone = ctk.CTkFrame(tarjeta, corner_radius=10, fg_color="#fafafa",
-            border_width=1, border_color=color_borde_dropzone, height=46)
-        dropzone.pack(fill="x", padx=18, pady=(0, 10))
+            border_width=1, border_color=color_borde_dropzone)
+        dropzone.pack(padx=18, pady=(0, 10), anchor="w", fill="x")
 
         if ejercicio.palabras_seleccionadas:
+            fila_drop = ctk.CTkFrame(dropzone, fg_color="transparent")
+            fila_drop.pack(fill="x", pady=4)
+            contador_drop = 0
+
             for i, palabra in enumerate(ejercicio.palabras_seleccionadas):
-                ctk.CTkButton(dropzone, text=palabra, height=30, corner_radius=15,
+                if contador_drop == 4:
+                    fila_drop = ctk.CTkFrame(dropzone, fg_color="transparent")
+                    fila_drop.pack(fill="x", pady=2)
+                    contador_drop = 0
+
+                ctk.CTkButton(fila_drop, text=palabra, height=30, corner_radius=15,
                     fg_color="#ffe0c2", text_color="#FF8C00", hover_color="#ffd2a8",
-                    font=("Arial", 12, "bold"),
-                    command=lambda idx=i: self.click_seleccionada(idx)).pack(side="left", padx=4, pady=8)
+                    font=("Arial", 12, "bold"), width=0,
+                    command=lambda idx=i: self.click_seleccionada(idx)).pack(side="left", padx=2, pady=2)
+                contador_drop += 1
         else:
             ctk.CTkLabel(dropzone, text="Click the words to build the sentence",
                 font=("Arial", 12), text_color="gray").pack(pady=10)
 
-        # --- banco de palabras disponibles ---
-        fila_banco = ctk.CTkFrame(tarjeta, fg_color="transparent")
-        fila_banco.pack(fill="x", padx=18, pady=(0, 5))
+        # --- banco de palabras disponibles (en filas) ---
+        banco_frame = ctk.CTkFrame(tarjeta, fg_color="transparent")
+        banco_frame.pack(fill="x", padx=18, pady=(0, 5))
+
+        fila_actual = ctk.CTkFrame(banco_frame, fg_color="transparent")
+        fila_actual.pack(anchor="w", pady=2)
+        contador = 0
+        ancho_fila = 0
+        ancho_maximo = 380  # ← ajusta este valor si la tarjeta es más ancha o más angosta
+
         for i, ficha in enumerate(ejercicio.banco_palabras):
             if ficha["usada"]:
                 continue
-            ctk.CTkButton(fila_banco, text=ficha["texto"], height=30, corner_radius=15,
+
+            # calcular ancho aproximado del boton segun largo del texto
+            ancho_boton = len(ficha["texto"]) * 9 + 24
+
+            if ancho_fila + ancho_boton > ancho_maximo:
+                fila_actual = ctk.CTkFrame(banco_frame, fg_color="transparent")
+                fila_actual.pack(anchor="w", pady=2)
+                ancho_fila = 0
+
+            ctk.CTkButton(fila_actual, text=ficha["texto"], height=30, corner_radius=15,
                 fg_color="#f0f0f0", text_color="#1a1a1a", hover_color="#e2e2e2",
-                font=("Arial", 12),
-                command=lambda idx=i: self.click_banco(idx)).pack(side="left", padx=4, pady=4)
+                font=("Arial", 12), width=0,
+                command=lambda idx=i: self.click_banco(idx)).pack(side="left", padx=2, pady=2)
+
+            ancho_fila += ancho_boton + 4
 
         # --- mensaje de intentos / error / revelada ---
         if self.revelada:
@@ -606,11 +640,6 @@ class PantallaConstructor(ctk.CTkFrame):
             self.completar_verbo()
 
     def completar_verbo(self):
-        """Se completaron las 3 oraciones del verbo actual. Si hay un
-        verbo siguiente, esta misma clase pasa el control a
-        PantallaAprender (vocabulario) para ese verbo siguiente -- asi lo
-        pidio el equipo: cada pantalla llama directamente a la otra,
-        sin pasar por un callback externo de main.py."""
         self.indice_verbo += 1
         self.indice_tiempo = 0
 
@@ -620,32 +649,48 @@ class PantallaConstructor(ctk.CTkFrame):
             self.ir_a_pantalla_aprender()
 
     def ir_a_pantalla_aprender(self):
-        """Importa PantallaAprender (de aprender.py) y la muestra en el
-        mismo contenedor donde estaba este PantallaConstructor.
-
-        Import diferido (adentro del metodo, no arriba del archivo) a
-        proposito: aprender.py probablemente importa PantallaConstructor
-        de vuelta para el sentido inverso, y un import circular arriba
-        de ambos archivos rompería todo. Asi cada uno se importa al otro
-        solo en el momento en que realmente lo necesita.
-
-        Si aprender.py no existe todavia o no tiene PantallaAprender (por
-        ejemplo, mientras se prueba constructor.py solo), no se rompe: se
-        sigue mostrando el constructor con el siguiente verbo.
-        """
         contenedor = self.master
+        usuario = self.usuario
+        indice_siguiente = self.indice_verbo  # ya incrementado, es el siguiente verbo
+
         try:
             from aprender import PantallaAprender
-            siguiente_pantalla = PantallaAprender(contenedor, self.usuario)
+
+            def ir_a_constructor(nombre_verbo):          # ← ahora es un string
+                # Buscar el índice real de ese verbo en el JSON
+                if nombre_verbo in self.orden_verbos:
+                    indice = self.orden_verbos.index(nombre_verbo)
+                else:
+                    indice = self.indice_verbo           # fallback: quedarse donde estaba
+
+                for widget in contenedor.winfo_children():
+                    widget.destroy()
+                nuevo = PantallaConstructor(contenedor, usuario, indice_inicial=indice)
+                nuevo.pack(fill="both", expand=True)
+
+            siguiente_pantalla = PantallaAprender(
+                contenedor,
+                usuario,
+                indice_inicial=indice_siguiente,
+                al_completar=ir_a_constructor
+            )
         except Exception as error:
-            print(f"[constructor.py] No se pudo abrir PantallaAprender ({error}); "
-                  f"sigo en el constructor con el siguiente verbo.")
+            print(f"[constructor.py] No se pudo abrir PantallaAprender ({error})")
             self.preparar_ejercicio_actual()
             self.refrescar_pantalla()
             return
 
         self.destroy()
         siguiente_pantalla.pack(fill="both", expand=True)
+
+    def _ir_a_constructor_desde_aprender(self, indice_verbo):
+        contenedor = self.master if self.winfo_exists() else None
+        if contenedor is None:
+            return
+        for widget in contenedor.winfo_children():
+            widget.destroy()
+        nuevo_constructor = PantallaConstructor(contenedor, self.usuario)
+        nuevo_constructor.pack(fill="both", expand=True)
 
     def mostrar_modulo_completo(self):
         for widget in self.winfo_children():

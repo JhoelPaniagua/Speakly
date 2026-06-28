@@ -1,0 +1,54 @@
+# Base de datos de oraciones para Sentences - Verbo (constructor.py)
+# Formato: verbo|tiempo|frase_espanol|oracion_correcta|distractores
+#   - tiempo: presente | pasado | futuro
+#   - oracion_correcta: palabras en ingles separadas por espacio, EN ORDEN
+#   - distractores: palabras de relleno separadas por coma (no van en la oracion)
+# Las imagenes deben existir en imagenes_verbos/ con el mismo nombre que en verbos.txt
+play|presente|Ellos juegan futbol|They play soccer|played,will,read
+play|pasado|Yo jugue tenis|I played tennis|play,will,sing
+play|futuro|Nosotros jugaremos basquetbol|We will play basketball|played,playing,read
+eat|presente|Ella come el desayuno|She eats breakfast|ate,will,write
+eat|pasado|Yo comi pizza|I ate pizza|eat,will,dance
+eat|futuro|Ellos comeran la cena|They will eat dinner|ate,eating,sleep
+read|presente|El lee libros|He reads books|read,will,sing
+read|pasado|Tu leiste revistas|You read magazines|reads,will,eat
+read|futuro|Nosotros leeremos historias|We will read stories|reads,reading,play
+sing|presente|Yo canto canciones|I sing songs|sang,will,write
+sing|pasado|Ella canto jazz|She sang jazz|sings,will,run
+sing|futuro|Ellos cantaran opera|They will sing opera|sang,singing,read
+write|presente|El escribe cartas|He writes letters|wrote,will,eat
+write|pasado|Yo escribi poemas|I wrote poems|write,will,sleep
+write|futuro|Nosotros escribiremos historias|We will write stories|wrote,writing,sing
+sleep|presente|Ella duerme temprano|She sleeps early|slept,will,read
+sleep|pasado|Yo dormi tarde|I slept late|sleep,will,talk
+sleep|futuro|Ellos dormiran afuera|They will sleep outside|slept,sleeping,sing
+run|presente|El corre rapido|He runs fast|ran,will,eat
+run|pasado|Yo corri ayer|I ran yesterday|run,will,dance
+run|futuro|Nosotros correremos mañana|We will run tomorrow|ran,running,sleep
+talk|presente|Ellos hablan fuerte|They talk loudly|talked,will,read
+talk|pasado|Yo hable ayer|I talked yesterday|talk,will,sleep
+talk|futuro|Nosotros hablaremos despues|We will talk later|talked,talking,eat
+dance|presente|Ella baila con gracia|She dances gracefully|danced,will,run
+dance|pasado|Yo baile salsa|I danced salsa|dance,will,sing
+dance|futuro|Ellos bailaran esta noche|They will dance tonight|danced,dancing,talk
+listen|presente|El escucha con atencion|He listens carefully|listened,will,eat
+listen|pasado|Yo escuche ayer|I listened yesterday|listen,will,write
+listen|futuro|Nosotros escucharemos mañana|We will listen tomorrow|listened,listening,run
+speak|presente|Ella habla ingles|She speaks English|spoke,will,sleep
+speak|pasado|Yo hable español|I spoke Spanish|speak,will,dance
+speak|futuro|Ellos hablaran frances|They will speak French|spoke,speaking,read
+ask|presente|El pregunta cosas|He asks questions|asked,will,sing
+ask|pasado|Yo pregunte ayer|I asked yesterday|ask,will,talk
+ask|futuro|Nosotros preguntaremos mañana|We will ask tomorrow|asked,asking,eat
+answer|presente|Ella responde rapido|She answers quickly|answered,will,run
+answer|pasado|Yo respondi correctamente|I answered correctly|answer,will,dance
+answer|futuro|Ellos responderan pronto|They will answer soon|answered,answering,sleep
+learn|presente|El aprende rapido|He learns quickly|learned,will,talk
+learn|pasado|Yo aprendi ingles|I learned English|learn,will,sing
+learn|futuro|Nosotros aprenderemos español|We will learn Spanish|learned,learning,read
+teach|presente|Ella enseña estudiantes|She teaches students|taught,will,learn
+teach|pasado|El enseño ciencias|He taught science|teaches,will,dance
+teach|futuro|Nosotros enseñaremos matematicas|We will teach math|taught,teaching,sleep
+practice|presente|Ellos practican diario|They practice daily|practiced,will,play
+practice|pasado|Yo practique piano|I practiced piano|practices,practice,songs
+practice|futuro|Nosotros practicaremos guitarra|We will practice guitar|practiced,practicing,music

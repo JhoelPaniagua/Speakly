@@ -1,0 +1,31 @@
+{
+    "Prueba": {
+        "vocabulario": {},
+        "oraciones": {
+            "play": {
+                "presente": {
+                    "estado": "correcto",
+                    "intentos": 3,
+                    "xp": 30
+                },
+                "pasado": {
+                    "estado": "correcto",
+                    "intentos": 3,
+                    "xp": 30
+                },
+                "futuro": {
+                    "estado": "correcto",
+                    "intentos": 2,
+                    "xp": 20
+                }
+            },
+            "eat": {
+                "presente": {
+                    "estado": "correcto",
+                    "intentos": 1,
+                    "xp": 10
+                }
+            }
+        }
+    }
+}
