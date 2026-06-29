@@ -5,6 +5,8 @@ from PIL import Image
 
 from aprender import PantallaAprender
 from constructor import PantallaConstructor
+from progreso import PantallaProgreso
+from ranking import PantallaRanking
 
 
 ctk.set_appearance_mode("dark")
@@ -117,7 +119,7 @@ class App(ctk.CTk):
         self.btn_ranking = ctk.CTkButton(self.barra, text="  Ranking", image=ico_ranking,
             font=("Arial", 14), anchor="w",
             fg_color="transparent", text_color="white", hover_color="#FFA626", height=55, corner_radius=20,
-            command=lambda: self.cargar_texto("🏆 Aquí va el Ranking"))
+            command=self.mostrar_ranking)
         self.btn_ranking.pack(pady=0, padx=15, fill="x")
 
         # Cuadros stats
@@ -161,22 +163,7 @@ class App(ctk.CTk):
             widget.destroy()
 
     def mostrar_home(self):
-        self.limpiar_contenido()
-
-        ctk.CTkLabel(self.contenido, text=f"Welcome back, {self.usuario['nombre']}! 👋",
-            font=("Arial", 26, "bold"), text_color="#1a1a1a").pack(anchor="w", padx=40, pady=(30, 0))
-
-        ctk.CTkLabel(self.contenido, text="Continue your progress. Keep it up!",
-            font=("Arial", 14), text_color="gray").pack(anchor="w", padx=40, pady=(5, 20))
-
-        tarjeta = ctk.CTkFrame(self.contenido, corner_radius=15, fg_color="#FF9600")
-        tarjeta.pack(padx=40, pady=10, fill="x")
-
-        ctk.CTkLabel(tarjeta, text="YOUR PROGRESS",
-            font=("Arial", 12, "bold"), text_color="#2b1500").pack(anchor="w", padx=20, pady=(15, 0))
-
-        ctk.CTkLabel(tarjeta, text="0 / 16 verbos",
-            font=("Arial", 22, "bold"), text_color="white").pack(anchor="w", padx=20, pady=(0, 15))
+        self.mostrar_progreso()
 
     def cargar_texto(self, texto):
         self.limpiar_contenido()
@@ -246,6 +233,64 @@ class App(ctk.CTk):
 
         login = SpeaklyApp()
         login.mainloop()
+
+    def mostrar_progreso(self):
+        self.limpiar_contenido()
+        pantalla = PantallaProgreso(self.contenido, usuario=self.usuario)
+        pantalla.pack(fill="both", expand=True)
+
+    def mostrar_ranking(self):
+        if hasattr(self, 'ventana_ranking') and self.ventana_ranking.winfo_exists():
+            return
+
+        self.update_idletasks()
+
+        x = self.winfo_rootx() + self.barra.winfo_width()
+        y = self.winfo_rooty()
+        ancho = self.contenido.winfo_width()
+        alto = self.contenido.winfo_height()
+
+        px = x + (ancho // 2) - 230
+        py = y + (alto // 2) - 260
+
+        self.fondo_oscuro_ranking = ctk.CTkToplevel(self)
+        self.fondo_oscuro_ranking.overrideredirect(True)
+        self.fondo_oscuro_ranking.geometry(f"{ancho}x{alto}+{x}+{y}")
+        self.fondo_oscuro_ranking.configure(fg_color="#000000")
+        self.fondo_oscuro_ranking.attributes("-alpha", 0.4)
+
+        self.ventana_ranking = ctk.CTkToplevel(self)
+        self.ventana_ranking.overrideredirect(True)
+        self.ventana_ranking.geometry(f"460x520+{px}+{py}")
+        self.ventana_ranking.grab_set()
+        self.fondo_oscuro_ranking.lift()
+        self.ventana_ranking.lift()
+
+        def actualizar_pos(event=None):
+            if hasattr(self, 'ventana_ranking') and self.ventana_ranking.winfo_exists():
+                self.update_idletasks()
+                x = self.winfo_rootx() + self.barra.winfo_width()
+                y = self.winfo_rooty()
+                ancho = self.contenido.winfo_width()
+                alto = self.contenido.winfo_height()
+                px = x + (ancho // 2) - 230
+                py = y + (alto // 2) - 260
+                self.ventana_ranking.geometry(f"460x520+{px}+{py}")
+                if hasattr(self, 'fondo_oscuro_ranking') and self.fondo_oscuro_ranking.winfo_exists():
+                    self.fondo_oscuro_ranking.geometry(f"{ancho}x{alto}+{x}+{y}")
+
+        self.bind("<Configure>", actualizar_pos)
+
+        def al_cerrar_ranking():
+            self.unbind("<Configure>")
+            if hasattr(self, 'fondo_oscuro_ranking') and self.fondo_oscuro_ranking.winfo_exists():
+                self.fondo_oscuro_ranking.destroy()
+
+        self.ventana_ranking.bind("<Destroy>", lambda e: al_cerrar_ranking())
+
+        from ranking import PantallaRanking
+        popup = PantallaRanking(self.ventana_ranking, usuario=self.usuario, cerrar_cmd=self.ventana_ranking.destroy)
+        popup.pack(expand=True, fill="both")
 
     def mostrar_aprender(self):                        # ← sin indice_verbo
         self.limpiar_contenido()
