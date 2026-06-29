@@ -23,20 +23,21 @@ class SpeaklyApp(ctk.CTk):
     def __init__(self):
         super().__init__()
         self.title("Speakly")
-        self.geometry("1100x700")
+        self.geometry("800x600")
         self.resizable(True, True)
+        self.after(0, lambda: self.state("zoomed"))
         self.configure(fg_color=BG_WHITE)
         self.usuario_actual = None
 
-        # Panel izquierdo (naranja) — fijo
-        self.left = ctk.CTkFrame(self, width=730, corner_radius=0, fg_color=ORANGE)
-        self.left.place(x=0, y=0, relheight=1)
+        # Panel izquierdo (naranja) 
+        self.left = ctk.CTkFrame(self, width=600, corner_radius=0, fg_color=ORANGE)
+        self.left.place(x=0, y=0, relheight=1, relwidth=0.60)
         self.left.pack_propagate(False)
         self._build_left_panel()
 
         # Contenedor derecho (blanco) — las pantallas se intercambian aquí
-        self.right = ctk.CTkFrame(self, width=370, corner_radius=0, fg_color=BG_WHITE)
-        self.right.place(x=730, y=0, relheight=1)
+        self.right = ctk.CTkFrame(self, corner_radius=0, fg_color=BG_WHITE)
+        self.right.place(relx=0.6, y=0, relheight=1, relwidth=0.4)
         self.right.pack_propagate(False)
 
         self.show_login()

@@ -22,7 +22,7 @@ class App(ctk.CTk):
         self.title("Speakly")
         self.geometry("1000x600")
         self.resizable(True, True)
-        self.state("normal")
+        self.after(0, lambda: self.state("zoomed"))
 
 
         self.grid_columnconfigure(0, weight=0)
@@ -313,10 +313,6 @@ class App(ctk.CTk):
 
 
 if __name__ == "__main__":
-    usuario_prueba = {
-        "nombre":"Prueba",
-        "correo":"prueba@gmail.com"
-    }
-
-    app = App(usuario_prueba)
-    app.mainloop()
+    from login import SpeaklyApp
+    login = SpeaklyApp()
+    login.mainloop()
