@@ -1,8 +1,12 @@
-import customtkinter as ctk
+import sys
 import os
+
+if getattr(sys, 'frozen', False):
+    os.chdir(os.path.dirname(sys.executable))
+
+import customtkinter as ctk
 from perfil import PerfilUsuario
 from PIL import Image
-
 from aprender import PantallaAprender
 from constructor import PantallaConstructor
 from progreso import PantallaProgreso

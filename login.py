@@ -1,3 +1,10 @@
+import sys
+import os
+
+if getattr(sys, 'frozen', False):
+    os.chdir(os.path.dirname(sys.executable))
+
+
 import customtkinter as ctk
 from PIL import Image
 from main import App
@@ -155,15 +162,12 @@ class SpeaklyApp(ctk.CTk):
                 break
 
         if usuario_encontrado:
-
+            print(f"Usuario encontrado: {usuario_encontrado}")
             self.destroy()
-
-
             app = App(usuario_encontrado)
-
             app.mainloop()
         else:
-
+            print("Usuario NO encontrado")
             self._show_msg(
                 self.right,
                 "Incorrect username or password",
@@ -311,14 +315,18 @@ class SpeaklyApp(ctk.CTk):
         self.after(2500, msg.destroy)
 
     def cargar_usuarios(self):
-        if not os.path.exists("usuarios.json"):
-            with open("usuarios.json","w") as archivo:
+        ruta = "usuarios.json"
+        if not os.path.exists(ruta):
+            with open(ruta, "w") as archivo:
                 json.dump([], archivo)
-
             return []
-
-        with open("usuarios.json","r") as archivo:
+        with open(ruta, "r") as archivo:
             return json.load(archivo)
+
+    def guardar_usuarios(self, usuarios):
+        ruta = "usuarios.json"
+        with open(ruta, "w") as archivo:
+            json.dump(usuarios, archivo, indent=4)
 
 
 
