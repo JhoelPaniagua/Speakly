@@ -32,7 +32,7 @@ class PantallaAprender(ctk.CTkFrame):
             })
 
         self.total = len(self.vocabulario)
-        self.carpeta_imagenes = os.path.join(RUTA_BASE, "imagenes_verbos")
+        self.carpeta_imagenes = os.path.join(RUTA_BASE, "imagenes")
         self.carpeta_audios = os.path.join(RUTA_BASE, "audios")  
 
         self.crear_contenedor_principal()
@@ -72,7 +72,7 @@ class PantallaAprender(ctk.CTkFrame):
         bloque_interactivo.pack(fill="both", expand=True)
         
         # Tarjeta Izquierda 
-        self.card_palabra = ctk.CTkFrame(bloque_interactivo, fg_color="white", corner_radius=15, width=380)
+        self.card_palabra = ctk.CTkFrame(bloque_interactivo, fg_color="white", corner_radius=15, width=600)
         self.card_palabra.pack(side="left", fill="both", expand=True, padx=(0, 20))
         self.card_palabra.pack_propagate(False)
         
@@ -123,7 +123,7 @@ class PantallaAprender(ctk.CTkFrame):
         ruta_img = os.path.join(self.carpeta_imagenes, datos["img"])
         if os.path.exists(ruta_img):
             img_pil = Image.open(ruta_img)
-            img_ctk = ctk.CTkImage(light_image=img_pil, size=(320, 280))
+            img_ctk = ctk.CTkImage(light_image=img_pil, size=(690, 550))
             self.lbl_imagen.configure(image=img_ctk, text="")
         else:
             self.lbl_imagen.configure(image=None,
